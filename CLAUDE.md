@@ -90,12 +90,12 @@ All departments use the same JSONBin bin to share numbers across browsers/device
 ## Posting to Teams
 
 ### Webhooks
-Stored in `STATE.meta.teamsWebhooks["1st"]` and `["2nd"]` (plus submitWebhook, sendReportWebhook, checkStatusWebhook). Set via Webhooks ▾ dropdown.
-
-`DEFAULT_WEBHOOK_1ST` and `DEFAULT_WEBHOOK_2ND` are Power Automate flow URLs baked into the file.
+All webhook URLs are static constants baked into the file — `DEFAULT_WEBHOOK_1ST`, `DEFAULT_WEBHOOK_2ND`, `DEFAULT_WEBHOOK_SUBMIT`, `DEFAULT_WEBHOOK_SEND`, `DEFAULT_WEBHOOK_CHECK`. They are never stored in `STATE` or localStorage. The Webhooks ▾ dropdown is read-only (shows "Configured" for each entry). To update a webhook, change the constant in the source and redeploy.
 
 ### Posting flow
-`postAreaToTeams(area)` → builds Adaptive Card via `buildAdaptiveCard()` → posts to the current shift's webhook → silently calls `pushToJsonBin(area)`
+`postAreaToTeams(area)` → builds Adaptive Card via `buildAdaptiveCard()` → posts to the current shift's webhook → silently calls `pushToJsonBin(area)`. Post Late also calls `pushToJsonBin(current)` after sending.
+
+`postToTeams` treats HTTP 200/202 as confirmed success. Status 0 (CORS-blocked response) shows "confirm it arrived in Teams" rather than a false success toast.
 
 ### Adaptive Card
 Built by `cardBlocksForBlock(block, areas)` → `cpBlocks(area, proc, sh, cp)`. Includes volume columns, HC FactSet, financial FactSet, PPH line, note. No emoji in card text.
@@ -113,6 +113,7 @@ Built by `cardBlocksForBlock(block, areas)` → `cpBlocks(area, proc, sh, cp)`. 
 - Wipes all `plan_u, act_u, plan_f, act_f, plan_hc, act_hc, plan_ind_hc, act_ind_hc, recirc, shiftHours, totalHours, indirectHours, note_u` across all areas
 - Clears `STATE.notes`, `STATE.procNotes`, `STATE.meta.autoSyncedBlocks`
 - Sets `STATE.meta.lastResetDate = today`
+- Sets `_dayResetFired = true` → a toast fires 400ms after load: "New day — all entries cleared for YYYY-MM-DD"
 
 SEED data (historical example entries) is the fallback default — loaded when localStorage is empty. It does NOT reset to SEED on a new day; fields are wiped to null.
 
