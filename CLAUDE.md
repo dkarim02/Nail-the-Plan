@@ -92,6 +92,8 @@ All departments use the same JSONBin bin to share numbers across browsers/device
 ### Webhooks
 All webhook URLs are static constants baked into the file — `DEFAULT_WEBHOOK_1ST`, `DEFAULT_WEBHOOK_2ND`, `DEFAULT_WEBHOOK_SUBMIT`, `DEFAULT_WEBHOOK_SEND`, `DEFAULT_WEBHOOK_CHECK`. They are never stored in `STATE` or localStorage. The Webhooks ▾ dropdown is read-only (shows "Configured" for each entry). To update a webhook, change the constant in the source and redeploy.
 
+`sendReport()` must use `DEFAULT_WEBHOOK_CHECK` (not `STATE.meta.checkStatusWebhook`) for the status check — always fall back to the constant or leaders without legacy localStorage will see all depts as Pending.
+
 ### Posting flow
 `postAreaToTeams(area)` → builds Adaptive Card via `buildAdaptiveCard()` → posts to the current shift's webhook → silently calls `pushToJsonBin(area)`. Post Late also calls `pushToJsonBin(current)` after sending.
 
@@ -122,6 +124,7 @@ SEED data (historical example entries) is the fallback default — loaded when l
 ## File structure
 
 - `index.html` — the entire app, single canonical file. Edit this directly.
+- `.nojekyll` — tells GitHub Pages to skip Jekyll and serve files directly (no Docker/build step).
 - `README.md` — public-facing feature list and usage notes
 - `CLAUDE.md` — this file
 
