@@ -1522,7 +1522,7 @@ function showStatusLoading(){
 function doSendReport(sh){
   const url = DEFAULT_WEBHOOK_SEND;
   if(!url){ toast("No Send Report webhook set — add it in the Post menu"); return; }
-  const shift = sh || (currentBlock()||{shift:'2nd'}).shift;
+  const shift = sh || activeShift();
   fetch(url, {method:"POST", headers:{"Content-Type":"application/json"},
     body:JSON.stringify({plan_date: STATE.meta.date, shift: shift})})
     .then(function(r){
@@ -1535,9 +1535,8 @@ function doSendReport(sh){
 function sendReport(){
   const sendUrl = DEFAULT_WEBHOOK_SEND;
   if(!sendUrl){ toast("No Send Report webhook set — add it in the Post menu"); return; }
-  const block=currentBlock();
-  const sh=block?block.shift:"2nd";
-  const checkUrl = STATE.meta.checkStatusWebhook || "";
+  const sh=activeShift();
+  const checkUrl = STATE.meta.checkStatusWebhook || DEFAULT_WEBHOOK_CHECK || "";
   // No check webhook — show status modal with unknown submissions so user still gets Email late override
   if(!checkUrl){
     showStatusModal([], AREAS.length, function(){ doSendReport(sh); }); return;
