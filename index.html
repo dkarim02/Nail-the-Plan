@@ -174,6 +174,16 @@ h1,h2,h3{font-family:var(--disp);margin:0;font-weight:600}
 .ind-pct{font-family:var(--mono);font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:20px;background:#EDE7F6;color:#6A3FA0;white-space:nowrap;flex-shrink:0}
 .ind-hrs-pct{font-family:var(--mono);font-size:10px;font-weight:600;padding:2px 6px;border-radius:20px;background:#EDE7F6;color:#6A3FA0;white-space:nowrap;flex-shrink:0;margin-left:4px}
 .fieldwrap{position:relative}
+.diff-badge{display:none;font-family:var(--mono);font-size:11px;font-weight:600;white-space:nowrap;flex-shrink:0;padding:0 4px 0 8px;pointer-events:none}
+.diff-badge.over{display:block;color:var(--make)}
+.diff-badge.under{display:block;color:var(--behind)}
+.act-wrap{display:flex;align-items:center;border:1px solid var(--line);border-radius:6px;background:#fff;overflow:hidden;transition:border-color .15s,box-shadow .15s}
+.act-wrap:hover{border-color:#CFCBC1}
+.act-wrap:focus-within{outline:2px solid var(--accent);outline-offset:1px}
+.act-wrap input.f{flex:1;min-width:0;border:none !important;background:transparent !important;box-shadow:none !important;outline:none !important}
+body.dark .act-wrap{background:#1C2128;border-color:var(--line)}
+body.dark .act-wrap:hover{border-color:#3C4650}
+body.dark .act-wrap input.f{color:var(--ink)}
 input.f{width:100%;border:1px solid var(--line);border-radius:6px;padding:7px 9px;font-family:var(--mono);font-size:14.5px;font-variant-numeric:tabular-nums;text-align:right;background:#fff;transition:border-color .15s,box-shadow .15s}
 
 /* ── Total hours input (replaces per-person dropdown) ── */
@@ -684,6 +694,7 @@ function renderMain(){
   for(const p in procs){ main.appendChild(processCard(current,p,procs[p])); }
   if(PROC_BRIDGE.has(current)){ for(const p in procs) main.appendChild(procBridgeCard(current,p)); }
   else { main.appendChild(bridgeCard(current)); }
+  refreshDiffBadges();
 }
 function processCard(area,proc,pdata){
   const r=rollProcess(pdata);
@@ -776,7 +787,18 @@ function numInput(area,proc,key,field,val){
     }
     liveUpdate();
   };
-  w.appendChild(i); return w;
+  if(field==="act_u"||field==="act_f"){
+    const aw=el("div","act-wrap");
+    const badge=el("span","diff-badge");
+    badge.dataset.diffArea=area; badge.dataset.diffProc=proc;
+    badge.dataset.diffKey=key; badge.dataset.diffField=field;
+    aw.appendChild(badge);
+    aw.appendChild(i);
+    w.appendChild(aw);
+  } else {
+    w.appendChild(i);
+  }
+  return w;
 }
 function place(n,a){n.style.gridArea=a;return n;}
 
@@ -1058,6 +1080,20 @@ function liveUpdate(){
   refreshComputed();
   scheduleSave();
 }
+function refreshDiffBadges(){
+  document.querySelectorAll(".diff-badge[data-diff-area]").forEach(badge=>{
+    const area=badge.dataset.diffArea, proc=badge.dataset.diffProc;
+    const key=badge.dataset.diffKey, field=badge.dataset.diffField;
+    const rec=(STATE.data[area]&&STATE.data[area][proc]&&STATE.data[area][proc][key])||{};
+    const planField=field==="act_u"?"plan_u":"plan_f";
+    const act=rec[field]; const plan=rec[planField];
+    if(act==null||plan==null){ badge.className="diff-badge"; return; }
+    const diff=act-plan;
+    badge.textContent=(diff>=0?"+":"")+fmt(diff);
+    badge.className="diff-badge "+(diff>=0?"over":"under");
+  });
+}
+
 function refreshComputed(){
   // area head pill
   const ar=rollArea(current);
@@ -1078,6 +1114,7 @@ function refreshComputed(){
       const s=cps[ci] && cps[ci].querySelector('[data-role=cpstat]'); if(s){s.className="cpstat "+st.cls; s.textContent=st.pct==null?st.label:pctTxt(st.pct)+" · "+st.label;} ci++; }
   });
   $("#main").querySelectorAll(".cppph").forEach(elm=>{ elm.innerHTML=pphHTML(current, elm.dataset.proc, elm.dataset.sh, elm.dataset.cp); });
+  refreshDiffBadges();
   refreshBridges();
 }
 function renderUpdated(){
@@ -1519,12 +1556,14 @@ function showStatusLoading(){
 }
 
 /* ---- Send Report ---- */
-function doSendReport(sh){
+function doSendReport(sh, justification){
   const url = DEFAULT_WEBHOOK_SEND;
   if(!url){ toast("No Send Report webhook set — add it in the Post menu"); return; }
   const shift = sh || activeShift();
+  var payload = {plan_date: STATE.meta.date, shift: shift};
+  if(justification) payload.late_justification = justification;
   fetch(url, {method:"POST", headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({plan_date: STATE.meta.date, shift: shift})})
+    body:JSON.stringify(payload)})
     .then(function(r){
       if(r.ok||r.status===202||r.status===0) toast("EOD report sent ✓ — check your email");
       else toast("Send failed — HTTP "+r.status);
@@ -1634,7 +1673,7 @@ function showLateEmailModal(){
   cancel.onclick=function(){ overlay.remove(); }; foot.appendChild(cancel);
   var sendBtn=document.createElement("button"); sendBtn.className="btn primary"; sendBtn.textContent="Send Report";
   sendBtn.disabled=true;
-  sendBtn.onclick=function(){ overlay.remove(); doSendReport(sel.value); };
+  sendBtn.onclick=function(){ var j=just.value.trim(); overlay.remove(); doSendReport(sel.value, j); };
   foot.appendChild(sendBtn); box.appendChild(foot);
   overlay.appendChild(box);
   document.body.appendChild(overlay);
