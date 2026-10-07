@@ -21,7 +21,7 @@ No backend, no build system — single self-contained HTML file. All JS, CSS, an
 ### State & Storage
 - All data lives in browser `localStorage` under key `ntp_dc499_v1`
 - `STATE` shape: `{ data, notes, procNotes, meta }`
-- `STATE.data[area][process][shift|checkpoint]` = `{ plan_u, act_u, plan_f, act_f, plan_hc, act_hc, plan_ind_hc, act_ind_hc, recirc, shiftHours, totalHours, indirectHours, note_u }`
+- `STATE.data[area][process][shift|checkpoint]` = `{ plan_u, act_u, plan_f, act_f, plan_hc, act_hc, plan_ind_hc, act_ind_hc, recirc, shiftHours, totalHours, indirectHours, gapHours, perfPct, note_u }`
 - `reconcile()` runs on load — handles area/process renames, fills missing keys from SEED defaults
 - `resetPersonHoursIfNewDay()` wipes ALL data fields + notes + autoSyncedBlocks when the plan date rolls over (PST, before 3 AM counts as previous day)
 
@@ -46,6 +46,8 @@ Item Prep: Flat, GOH, Shoes
 - **Fin PPH** = `act_f / totalHours` — financial units per total hours (manually entered)
 
 `indirectHours` shows as a % of `totalHours`. `indirectHours` is entered per checkpoint (Mid/EOD), not per shift.
+
+`gapHours` is entered per checkpoint and shows as a % of `totalHours` (same as indirect). `perfPct` (Performance %) is typed straight from the labor report — no calculation, no make/near/behind coloring.
 
 ### Roll-up logic
 - Per shift: uses EOD if both plan+actual entered, else Midday, else skipped

@@ -546,7 +546,7 @@ function resetPersonHoursIfNewDay(){
     const r=STATE.data[a][p][key];
     r.plan_u=null; r.act_u=null; r.plan_f=null; r.act_f=null;
     r.plan_hc=null; r.act_hc=null; r.plan_ind_hc=null; r.act_ind_hc=null;
-    r.recirc=null; r.shiftHours=null; r.totalHours=null; r.indirectHours=null; r.note_u="";
+    r.recirc=null; r.shiftHours=null; r.totalHours=null; r.indirectHours=null; r.gapHours=null; r.perfPct=null; r.note_u="";
   }
   STATE.notes={}; STATE.procNotes={};
   STATE.meta.autoSyncedBlocks={};
@@ -708,8 +708,8 @@ function processCard(area,proc,pdata){
   for(const sh of SHIFTS){
     const sb=el("div","shiftblock shift"+(sh==="1st"?"1":"2"));
     const shHead=el("div","sh"); shHead.innerHTML=`<span class="shdot"></span><span>${sh} Shift</span>`;
-    const eodR=pdata[sh+"|EOD"]||(pdata[sh+"|EOD"]={plan_u:null,act_u:null,note_u:"",plan_f:null,act_f:null,note_f:"",plan_hc:null,act_hc:null,plan_ind_hc:null,act_ind_hc:null,recirc:null,shiftHours:null,totalHours:null,indirectHours:null});
-    pdata[sh+"|Midday"]=pdata[sh+"|Midday"]||{plan_u:null,act_u:null,note_u:"",plan_f:null,act_f:null,note_f:"",plan_hc:null,act_hc:null,plan_ind_hc:null,act_ind_hc:null,recirc:null,totalHours:null,indirectHours:null};
+    const eodR=pdata[sh+"|EOD"]||(pdata[sh+"|EOD"]={plan_u:null,act_u:null,note_u:"",plan_f:null,act_f:null,note_f:"",plan_hc:null,act_hc:null,plan_ind_hc:null,act_ind_hc:null,recirc:null,shiftHours:null,totalHours:null,indirectHours:null,gapHours:null,perfPct:null});
+    pdata[sh+"|Midday"]=pdata[sh+"|Midday"]||{plan_u:null,act_u:null,note_u:"",plan_f:null,act_f:null,note_f:"",plan_hc:null,act_hc:null,plan_ind_hc:null,act_ind_hc:null,recirc:null,totalHours:null,indirectHours:null,gapHours:null,perfPct:null};
     const hw=el("span","shhours");
 
     // Shift hrs (stays at the top \u2014 applies to whole shift)
@@ -723,7 +723,7 @@ function processCard(area,proc,pdata){
     // Build each checkpoint with its own Total hrs / Indirect hrs bar above it
     for(const cp of CPS){
       const key=sh+"|"+cp;
-      const cpRec=pdata[key]||(pdata[key]={plan_u:null,act_u:null,note_u:"",plan_f:null,act_f:null,note_f:"",plan_hc:null,act_hc:null,plan_ind_hc:null,act_ind_hc:null,recirc:null,shiftHours:null,totalHours:null,indirectHours:null});
+      const cpRec=pdata[key]||(pdata[key]={plan_u:null,act_u:null,note_u:"",plan_f:null,act_f:null,note_f:"",plan_hc:null,act_hc:null,plan_ind_hc:null,act_ind_hc:null,recirc:null,shiftHours:null,totalHours:null,indirectHours:null,gapHours:null,perfPct:null});
 
       // Hours bar: Total hrs | Indirect hrs \u2014 side by side above the card
       const hBar=el("div","cp-hrs-bar");
@@ -736,7 +736,7 @@ function processCard(area,proc,pdata){
       thInput.oninput=()=>{
         const v=thInput.value===""?null:parseFloat(thInput.value);
         STATE.data[area][proc][key].totalHours=isNaN(v)?null:v;
-        paintInd(); liveUpdate();
+        paintInd(); paintGap(); liveUpdate();
       };
       thCol.appendChild(thLbl); thCol.appendChild(thInput); hBar.appendChild(thCol);
 
@@ -759,6 +759,38 @@ function processCard(area,proc,pdata){
         paintInd(); liveUpdate();
       };
       indCol.appendChild(indLbl); indCol.appendChild(indInput); indCol.appendChild(indBadge); hBar.appendChild(indCol);
+
+      // Gap hrs col (shows as % of Total hrs)
+      const gapCol=el("div","cp-hrs-col");
+      const gapLbl=el("span","cp-hrs-lbl","Gap hrs");
+      const gapInput=el("input","f num shh"); gapInput.type="number"; gapInput.step="0.5"; gapInput.min="0"; gapInput.placeholder="—";
+      if(cpRec.gapHours!=null) gapInput.value=cpRec.gapHours;
+      const gapBadge=el("span","ind-hrs-pct"); gapBadge.style.display="none";
+      function paintGap(){
+        const th=STATE.data[area][proc][key].totalHours;
+        const gh=STATE.data[area][proc][key].gapHours;
+        if(th==null||th===0||gh==null){gapBadge.style.display="none";}
+        else{gapBadge.style.display="";gapBadge.textContent=Math.round(gh/th*100)+"% of hrs";}
+      }
+      paintGap();
+      gapInput.oninput=()=>{
+        const v=gapInput.value===""?null:parseFloat(gapInput.value);
+        STATE.data[area][proc][key].gapHours=isNaN(v)?null:v;
+        paintGap(); liveUpdate();
+      };
+      gapCol.appendChild(gapLbl); gapCol.appendChild(gapInput); gapCol.appendChild(gapBadge); hBar.appendChild(gapCol);
+
+      // Performance % col (entered straight from the labor report)
+      const perfCol=el("div","cp-hrs-col");
+      const perfLbl=el("span","cp-hrs-lbl","Perf %");
+      const perfInput=el("input","f num shh"); perfInput.type="number"; perfInput.step="1"; perfInput.min="0"; perfInput.placeholder="—";
+      if(cpRec.perfPct!=null) perfInput.value=cpRec.perfPct;
+      perfInput.oninput=()=>{
+        const v=perfInput.value===""?null:parseFloat(perfInput.value);
+        STATE.data[area][proc][key].perfPct=isNaN(v)?null:v;
+        liveUpdate();
+      };
+      perfCol.appendChild(perfLbl); perfCol.appendChild(perfInput); hBar.appendChild(perfCol);
 
       sb.appendChild(hBar);
       sb.appendChild(cpBlock(area,proc,key,cpRec));
@@ -919,6 +951,11 @@ function eodParts(area,proc,sh){
     const indMidPct=(mid.totalHours!=null&&mid.totalHours!==0)?` (${Math.round(mid.indirectHours/mid.totalHours*100)}% of total hrs)`:"";
     out.push(["Indirect hrs (Mid-day)",`${fmt1(mid.indirectHours)} hrs${indMidPct}`]);
   }
+  if(mid.gapHours!=null){
+    const gapMidPct=(mid.totalHours!=null&&mid.totalHours!==0)?` (${Math.round(mid.gapHours/mid.totalHours*100)}% of total hrs)`:"";
+    out.push(["Gap hrs (Mid-day)",`${fmt1(mid.gapHours)} hrs${gapMidPct}`]);
+  }
+  if(mid.perfPct!=null) out.push(["Performance (Mid-day)",`${mid.perfPct}%`]);
   if(eod.plan_hc!=null||eod.act_hc!=null){
     out.push(["HC (EOD)",`${eod.act_hc==null?"\u2014":fmt(eod.act_hc)} actual vs ${eod.plan_hc==null?"\u2014":fmt(eod.plan_hc)} planned`]);
   }
@@ -926,6 +963,11 @@ function eodParts(area,proc,sh){
     const indEodPct=(eod.totalHours!=null&&eod.totalHours!==0)?` (${Math.round(eod.indirectHours/eod.totalHours*100)}% of total hrs)`:"";
     out.push(["Indirect hrs (EOD)",`${fmt1(eod.indirectHours)} hrs${indEodPct}`]);
   }
+  if(eod.gapHours!=null){
+    const gapEodPct=(eod.totalHours!=null&&eod.totalHours!==0)?` (${Math.round(eod.gapHours/eod.totalHours*100)}% of total hrs)`:"";
+    out.push(["Gap hrs (EOD)",`${fmt1(eod.gapHours)} hrs${gapEodPct}`]);
+  }
+  if(eod.perfPct!=null) out.push(["Performance (EOD)",`${eod.perfPct}%`]);
   if(hasRecirc(area)){
     if(mid.recirc!=null) out.push(["Recirc (Mid-day)",`${mid.recirc}% (goal \u2264 10% \u2014 ${mid.recirc<=10?"at/under goal":"over goal"})`]);
     if(eod.recirc!=null) out.push(["Recirc (EOD)",`${eod.recirc}% (goal \u2264 10% \u2014 ${eod.recirc<=10?"at/under goal":"over goal"})`]);
@@ -1127,13 +1169,14 @@ function renderUpdated(){
 function download(name,text,type){const b=new Blob([text],{type:type||"text/plain"});const u=URL.createObjectURL(b);const a=document.createElement("a");a.href=u;a.download=name;a.click();URL.revokeObjectURL(u);}
 function exportJson(){download(`ntp_dc499_${STATE.meta.date}.json`,JSON.stringify(STATE,null,1),"application/json");toast("Data exported");}
 function exportCsv(){
-  const rows=[["Date","Area","Process","Shift","Checkpoint","Planned HC","Actual HC","Indirect Hrs","Indirect Hrs %","UOM","Planned Vol","Actual Vol","% to Goal","Vol to Goal","Planned $","Actual $","Recirc %","Total Hrs","PPH","Note"]];
+  const rows=[["Date","Area","Process","Shift","Checkpoint","Planned HC","Actual HC","Indirect Hrs","Indirect Hrs %","Gap Hrs","Gap Hrs %","Performance %","UOM","Planned Vol","Actual Vol","% to Goal","Vol to Goal","Planned $","Actual $","Recirc %","Total Hrs","PPH","Note"]];
   for(const a of AREAS)for(const p in STATE.data[a])for(const sh of SHIFTS)for(const cp of CPS){
     const r=STATE.data[a][p][sh+"|"+cp]||{}; const st=statusOf(r.plan_u,r.act_u);
     const gap=(r.plan_u!=null&&r.act_u!=null)?r.plan_u-r.act_u:"";
     const _th=totalHoursHC(a,p,sh,cp), _pph=pph(a,p,sh,cp);
     const _indPct=(r.indirectHours!=null&&r.totalHours!=null&&r.totalHours!==0)?Math.round(r.indirectHours/r.totalHours*100)+"%":"";
-    rows.push([STATE.meta.date,a,p,sh,cp,r.plan_hc??"",r.act_hc??"",r.indirectHours??"",_indPct,processUOM(a,p)==="cases"?"Cases":"Units",r.plan_u??"",r.act_u??"",st.pct==null?"":Math.round(st.pct*100)+"%",gap,r.plan_f??"",r.act_f??"",r.recirc??"",_th==null?"":Math.round(_th*10)/10,_pph==null?"":Math.round(_pph*10)/10,(r.note_u||"").replace(/\n/g," / ")]);
+    const _gapPct=(r.gapHours!=null&&r.totalHours!=null&&r.totalHours!==0)?Math.round(r.gapHours/r.totalHours*100)+"%":"";
+    rows.push([STATE.meta.date,a,p,sh,cp,r.plan_hc??"",r.act_hc??"",r.indirectHours??"",_indPct,r.gapHours??"",_gapPct,r.perfPct==null?"":r.perfPct+"%",processUOM(a,p)==="cases"?"Cases":"Units",r.plan_u??"",r.act_u??"",st.pct==null?"":Math.round(st.pct*100)+"%",gap,r.plan_f??"",r.act_f??"",r.recirc??"",_th==null?"":Math.round(_th*10)/10,_pph==null?"":Math.round(_pph*10)/10,(r.note_u||"").replace(/\n/g," / ")]);
   }
   const csv=rows.map(r=>r.map(c=>{c=String(c);return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c;}).join(",")).join("\n");
   download(`ntp_dc499_${STATE.meta.date}.csv`,csv,"text/csv");toast("CSV exported");
@@ -1152,7 +1195,7 @@ function clearArea(area){
   if(!confirm("Clear ALL entered data for "+scope+"?\n\nThis wipes planned/actual volume, financial, HC, recirc, shift hours, PPH inputs and every note (both shifts, Mid-Day + EOD). This can't be undone.")) return;
   for(const p in procs){ for(const key in procs[p]){ const r=procs[p][key];
     r.plan_u=null; r.act_u=null; r.note_u=""; r.plan_f=null; r.act_f=null; r.note_f="";
-    r.plan_hc=null; r.act_hc=null; r.plan_ind_hc=null; r.act_ind_hc=null; r.recirc=null; r.shiftHours=null; r.totalHours=null; r.indirectHours=null; } }
+    r.plan_hc=null; r.act_hc=null; r.plan_ind_hc=null; r.act_ind_hc=null; r.recirc=null; r.shiftHours=null; r.totalHours=null; r.indirectHours=null; r.gapHours=null; r.perfPct=null; } }
   if(STATE.notes && STATE.notes[area]) STATE.notes[area]={"1st":"","2nd":""};
   save(true); renderAll(); toast(area+" data cleared — ready for new entry");
 }
@@ -1269,6 +1312,11 @@ function cpBlocks(area, proc, sh, cp){
       var indHrsPct=(rec.totalHours!=null&&rec.totalHours!==0)?" ("+Math.round(rec.indirectHours/rec.totalHours*100)+"% of hrs)":"";
       hcFacts.push({title:"Indirect hrs", value:fmt1(rec.indirectHours)+" hrs"+indHrsPct});
     }
+    if(rec.gapHours!=null){
+      var gapHrsPct=(rec.totalHours!=null&&rec.totalHours!==0)?" ("+Math.round(rec.gapHours/rec.totalHours*100)+"% of hrs)":"";
+      hcFacts.push({title:"Gap hrs", value:fmt1(rec.gapHours)+" hrs"+gapHrsPct});
+    }
+    if(rec.perfPct!=null) hcFacts.push({title:"Performance", value:rec.perfPct+"%"});
     blocks.push({type:"FactSet",spacing:"Small",facts:hcFacts});
   }
 
@@ -1707,6 +1755,7 @@ function buildAreaPayload(area){
           plan_ind_hc:r.plan_ind_hc, act_ind_hc:r.act_ind_hc,
           recirc:r.recirc, shiftHours:r.shiftHours,
           totalHours:r.totalHours, indirectHours:r.indirectHours,
+          gapHours:r.gapHours, perfPct:r.perfPct,
           note_u:r.note_u||""
         };
       }
@@ -1758,6 +1807,8 @@ function mergeRemoteArea(area, remoteProcs, force){
         if(src.shiftHours!=null) dst.shiftHours=src.shiftHours;
         if(src.totalHours!=null) dst.totalHours=src.totalHours;
         if(src.indirectHours!=null) dst.indirectHours=src.indirectHours;
+        if(src.gapHours!=null) dst.gapHours=src.gapHours;
+        if(src.perfPct!=null) dst.perfPct=src.perfPct;
         if(src.note_u) dst.note_u=src.note_u;
       } else {
         // Fill-only — only set fields that are null locally
@@ -1773,6 +1824,8 @@ function mergeRemoteArea(area, remoteProcs, force){
         if(dst.shiftHours==null && src.shiftHours!=null) dst.shiftHours=src.shiftHours;
         if(dst.totalHours==null && src.totalHours!=null) dst.totalHours=src.totalHours;
         if(dst.indirectHours==null && src.indirectHours!=null) dst.indirectHours=src.indirectHours;
+        if(dst.gapHours==null && src.gapHours!=null) dst.gapHours=src.gapHours;
+        if(dst.perfPct==null && src.perfPct!=null) dst.perfPct=src.perfPct;
         if((!dst.note_u||dst.note_u==="") && src.note_u) dst.note_u=src.note_u;
       }
     }
