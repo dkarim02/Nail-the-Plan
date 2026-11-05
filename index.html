@@ -191,7 +191,7 @@ input.f{width:100%;border:1px solid var(--line);border-radius:6px;padding:7px 9p
 .hc-wrap .fieldwrap{flex:1;min-width:0}
 input.f:hover{border-color:#CFCBC1}
 input.f::placeholder{color:#C4C8CE}
-textarea.noteta{align-self:stretch;width:100%;height:100%;min-height:112px;resize:vertical;
+textarea.noteta{align-self:stretch;width:100%;height:100%;min-height:190px;resize:vertical;
   border:1px solid var(--line);border-radius:6px;padding:9px 11px;font-family:var(--body);font-size:13.5px;line-height:1.5;background:#fff;color:var(--ink);transition:border-color .15s}
 textarea.noteta:hover{border-color:#CFCBC1}
 textarea.noteta::placeholder{color:#C4C8CE}
@@ -344,7 +344,7 @@ body.dark .sync-area-row{background:#1C2128;}
   .navbtn{width:auto;white-space:nowrap}
   .nav-bottom-block{display:none}
   .cpgrid{grid-template-columns:58px 1fr 1fr;grid-template-areas:"h0 hp ha" "ul up ua" "hcl hcp hca" "fl fp fa" "hn hn hn" "note note note";}
-  textarea.noteta{min-height:98px}
+  textarea.noteta{min-height:180px}
   .summary .track{width:100%}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -904,7 +904,7 @@ function cpBlock(area,proc,key,rec){
   g.appendChild(place(el("span","colhead"),"h0"));
   g.appendChild(place(el("span","colhead","Planned"),"hp"));
   g.appendChild(place(el("span","colhead","Actual"),"ha"));
-  g.appendChild(place(el("span","colhead left","Note"),"hn"));
+  g.appendChild(place(el("span","colhead left","Bridge Notes"),"hn"));
   g.appendChild(place(el("span","glbl",processUOM(area,proc)==="cases"?"Cases":"Units"),"ul"));
   g.appendChild(place(numInput(area,proc,key,"plan_u",rec.plan_u),"up"));
   g.appendChild(place(numInput(area,proc,key,"act_u",rec.act_u),"ua"));
@@ -920,12 +920,34 @@ function cpBlock(area,proc,key,rec){
   wrap.appendChild(pphLine(area,proc,key));
   return wrap;
 }
+/* ── bridge note sections: one box, headings typed in; empty headings never go out ── */
+const NOTE_SECTIONS={
+  Midday:["Open summary","Root cause","Immediate action (midday)","Countermeasure"],
+  EOD:["Open summary","Root cause","Action taken (end of day)","Countermeasure"]
+};
+const NOTE_HEADS=new Set([...NOTE_SECTIONS.Midday,...NOTE_SECTIONS.EOD].map(h=>h.toLowerCase()+":"));
+function noteTemplate(cp){ return (NOTE_SECTIONS[cp]||NOTE_SECTIONS.EOD).map(h=>h+":\n").join("\n"); }
+function isNoteHead(line){ return NOTE_HEADS.has(line.trim().toLowerCase()); }
+function noteClean(text){
+  const lines=String(text||"").split("\n"); const out=[];
+  for(let i=0;i<lines.length;i++){
+    const ln=lines[i];
+    if(isNoteHead(ln)){
+      let j=i+1, has=false;
+      while(j<lines.length && !isNoteHead(lines[j])){ if(lines[j].trim()){has=true;break;} j++; }
+      if(!has) continue;
+    }
+    out.push(ln);
+  }
+  return out.join("\n").replace(/\n{3,}/g,"\n\n").trim();
+}
 function noteArea(area,proc,key,field,val){
   const t=el("textarea","noteta");
-  t.placeholder=(key.split("|")[1]==="EOD"?"EOD":"Mid-Day")+" note — staffing (HC), backlog, downtime, recovery plan…";
-  t.value=val||"";
-  t.rows=3;
-  t.oninput=()=>{STATE.data[area][proc][key][field]=t.value; refreshBridges(); scheduleSave();};
+  const cp=key.split("|")[1];
+  t.placeholder=(cp==="EOD"?"EOD":"Mid-Day")+" bridge notes";
+  t.value=val||noteTemplate(cp);
+  t.rows=8;
+  t.oninput=()=>{STATE.data[area][proc][key][field]=noteClean(t.value)?t.value:""; refreshBridges(); scheduleSave();};
   return t;
 }
 /* ── auto EOD narrative: composes volume, financial, HC, mid-day note, EOD note ── */
@@ -984,7 +1006,7 @@ function eodParts(area,proc,sh){
   const thFMid=totalHoursVal(area,proc,sh,"Midday"), thFEod=totalHoursVal(area,proc,sh,"EOD");
   if(pFMid!=null) out.push(["Fin PPH (Mid-day)",`${fmt1(pFMid)} (${fmt1(thFMid)} total hrs)`]);
   if(pFEod!=null) out.push(["Fin PPH (EOD)",`${fmt1(pFEod)} (${fmt1(thFEod)} total hrs)`]);
-  const midN=(mid.note_u||"").trim(), eodN=(eod.note_u||"").trim();
+  const midN=noteClean(mid.note_u), eodN=noteClean(eod.note_u);
   if(midN) out.push(["Mid-day",midN]);
   if(eodN) out.push(["EOD",eodN]);
   return out;
@@ -1046,7 +1068,7 @@ function shiftNoteText(area,sh){
   const hc=` HC: ${r.hcA==null?"\u2014":fmt(r.hcA)} actual vs ${r.hcP==null?"\u2014":fmt(r.hcP)} planned.`;
   let line=`${area} \u2014 ${sh} Shift EOD (${STATE.meta.date}): ${pctTxt(r.pct)} to goal, ${fmt(r.act)} of ${fmt(r.plan)}${r.uomLabel}${gapTxt}. ${r.made}/${r.tot} processes at or above goal.${hc}`;
   const procNames=Object.keys(STATE.data[area]);
-  const n=(procNames.length===1 ? (((STATE.data[area][procNames[0]]||{})[sh+"|EOD"]||{}).note_u||"") : getNote(area,sh)).trim();
+  const n=noteClean(procNames.length===1 ? (((STATE.data[area][procNames[0]]||{})[sh+"|EOD"]||{}).note_u||"") : getNote(area,sh));
   return n? line+"\n"+n : line;
 }
 function copyShift(area,sh){const proc=Object.keys(STATE.data[area])[0];navigator.clipboard.writeText(bridgeBlockText(area,proc,sh)).then(()=>toast(`${sh} shift note copied`),()=>toast("Copy blocked"));}
@@ -1076,7 +1098,7 @@ function procShiftNoteText(area,proc,sh){
   const gapTxt=gap==null?"":(gap<=0?` — ${fmt(-gap)}${s2.uomLabel} over`:` — ${fmt(gap)}${s2.uomLabel} behind`);
   const hc=` HC: ${s2.hcA==null?"—":fmt(s2.hcA)} actual vs ${s2.hcP==null?"—":fmt(s2.hcP)} planned.`;
   let line=`${area} / ${proc} — ${sh} Shift EOD (${STATE.meta.date}): ${pctTxt(s2.pct)} to goal, ${fmt(s2.act)} of ${fmt(s2.plan)}${s2.uomLabel}${gapTxt}.${hc}`;
-  const n=(((STATE.data[area][proc]||{})[sh+"|EOD"]||{}).note_u||"").trim();
+  const n=noteClean(((STATE.data[area][proc]||{})[sh+"|EOD"]||{}).note_u);
   return n? line+"\n"+n : line;
 }
 function copyProcShift(area,proc,sh){navigator.clipboard.writeText(bridgeBlockText(area,proc,sh)).then(()=>toast(`${proc} ${sh} note copied`),()=>toast("Copy blocked"));}
@@ -1176,7 +1198,7 @@ function exportCsv(){
     const _th=totalHoursHC(a,p,sh,cp), _pph=pph(a,p,sh,cp);
     const _indPct=(r.indirectHours!=null&&r.totalHours!=null&&r.totalHours!==0)?Math.round(r.indirectHours/r.totalHours*100)+"%":"";
     const _gapPct=(r.gapHours!=null&&r.totalHours!=null&&r.totalHours!==0)?Math.round(r.gapHours/r.totalHours*100)+"%":"";
-    rows.push([STATE.meta.date,a,p,sh,cp,r.plan_hc??"",r.act_hc??"",r.indirectHours??"",_indPct,r.gapHours??"",_gapPct,r.perfPct==null?"":r.perfPct+"%",processUOM(a,p)==="cases"?"Cases":"Units",r.plan_u??"",r.act_u??"",st.pct==null?"":Math.round(st.pct*100)+"%",gap,r.plan_f??"",r.act_f??"",r.recirc??"",_th==null?"":Math.round(_th*10)/10,_pph==null?"":Math.round(_pph*10)/10,(r.note_u||"").replace(/\n/g," / ")]);
+    rows.push([STATE.meta.date,a,p,sh,cp,r.plan_hc??"",r.act_hc??"",r.indirectHours??"",_indPct,r.gapHours??"",_gapPct,r.perfPct==null?"":r.perfPct+"%",processUOM(a,p)==="cases"?"Cases":"Units",r.plan_u??"",r.act_u??"",st.pct==null?"":Math.round(st.pct*100)+"%",gap,r.plan_f??"",r.act_f??"",r.recirc??"",_th==null?"":Math.round(_th*10)/10,_pph==null?"":Math.round(_pph*10)/10,noteClean(r.note_u).replace(/\n+/g," / ")]);
   }
   const csv=rows.map(r=>r.map(c=>{c=String(c);return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c;}).join(",")).join("\n");
   download(`ntp_dc499_${STATE.meta.date}.csv`,csv,"text/csv");toast("CSV exported");
@@ -1347,9 +1369,10 @@ function cpBlocks(area, proc, sh, cp){
   }
 
   // Note
-  var note=(rec.note_u||"").trim();
+  var note=noteClean(rec.note_u);
   if(note){
-    blocks.push({type:"TextBlock",text:"NOTE",weight:"Bolder",spacing:"Small",size:"Small",color:"Accent"});
+    note=note.split("\n").filter(function(l){return l.trim();}).map(function(l){return isNoteHead(l)?"**"+l.trim()+"**":l;}).join("\n\n");
+    blocks.push({type:"TextBlock",text:"BRIDGE NOTES",weight:"Bolder",spacing:"Small",size:"Small",color:"Accent"});
     blocks.push({type:"TextBlock",text:note,wrap:true,spacing:"None",size:"Small",isSubtle:true});
   }
 
