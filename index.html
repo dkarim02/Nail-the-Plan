@@ -1028,12 +1028,12 @@ function eodParts(area,proc,sh){
   if(pFMid!=null) out.push(["Fin PPH (Mid-day)",`${fmt1(pFMid)} (${fmt1(thFMid)} total hrs)`]);
   if(pFEod!=null) out.push(["Fin PPH (EOD)",`${fmt1(pFEod)} (${fmt1(thFEod)} total hrs)`]);
   const midN=noteClean(mid.note_u), eodN=noteClean(eod.note_u);
-  if(midN) out.push(["Mid-day",midN]);
-  if(eodN) out.push(["EOD",eodN]);
+  if(midN) out.push(["Mid-day bridge notes",midN]);
+  if(eodN) out.push(["EOD bridge notes",eodN]);
   return out;
 }
-function composeEOD(area,proc,sh){ const p=eodParts(area,proc,sh); if(!p.length) return `<span class="submuted">Enter volume, financial, HC and Mid-Day / EOD notes \u2014 this summary builds automatically.</span>`; return p.map(x=>`<b>${x[0]}:</b> ${esc(x[1])}`).join("<br>"); }
-function composeEODText(area,proc,sh){ return eodParts(area,proc,sh).map(x=>`${x[0]}: ${x[1]}`).join("\n"); }
+function composeEOD(area,proc,sh){ const p=eodParts(area,proc,sh); if(!p.length) return `<span class="submuted">Enter volume, financial, HC and Mid-Day / EOD notes \u2014 this summary builds automatically.</span>`; return p.map(x=>`<b>${x[0]}:</b>${x[1].includes("\n")?"<br>":" "}${esc(x[1]).replace(/\n/g,"<br>")}`).join("<br>"); }
+function composeEODText(area,proc,sh){ return eodParts(area,proc,sh).map(x=>x[1].includes("\n")?`${x[0]}:\n${x[1]}`:`${x[0]}: ${x[1]}`).join("\n"); }
 function bridgeBlockText(area,proc,sh){ const label=PROC_BRIDGE.has(area)?`${area} / ${proc}`:area; const body=composeEODText(area,proc,sh); return `${label} \u2014 ${sh} Shift EOD (${STATE.meta.date})\n`+(body||"(no data entered)"); }
 function refreshBridges(){ $("#main").querySelectorAll(".eodsum").forEach(elm=>{ elm.innerHTML=composeEOD(current, elm.dataset.proc, elm.dataset.shift); }); }
 /* ── bridge note ── */
