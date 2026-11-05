@@ -929,8 +929,8 @@ function cpBlock(area,proc,key,rec){
 }
 /* ── bridge note sections: one box, fixed headings, one field each; saved as one note_u text ── */
 const NOTE_SECTIONS={
-  Midday:["Open summary","Root cause","Immediate action (midday)","Countermeasure"],
-  EOD:["Open summary","Root cause","Action taken (end of day)","Countermeasure"]
+  Midday:["Open summary","Root cause","Immediate action","Countermeasure"],
+  EOD:["Open summary","Root cause","Action taken","Countermeasure"]
 };
 const NOTE_HEADS=new Set([...NOTE_SECTIONS.Midday,...NOTE_SECTIONS.EOD].map(h=>h.toLowerCase()+":"));
 function isNoteHead(line){ return NOTE_HEADS.has(line.trim().toLowerCase()); }
