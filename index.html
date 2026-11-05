@@ -191,10 +191,17 @@ input.f{width:100%;border:1px solid var(--line);border-radius:6px;padding:7px 9p
 .hc-wrap .fieldwrap{flex:1;min-width:0}
 input.f:hover{border-color:#CFCBC1}
 input.f::placeholder{color:#C4C8CE}
-textarea.noteta{align-self:stretch;width:100%;height:100%;min-height:190px;resize:vertical;
+textarea.noteta{align-self:stretch;width:100%;height:100%;min-height:112px;resize:vertical;
   border:1px solid var(--line);border-radius:6px;padding:9px 11px;font-family:var(--body);font-size:13.5px;line-height:1.5;background:#fff;color:var(--ink);transition:border-color .15s}
 textarea.noteta:hover{border-color:#CFCBC1}
 textarea.noteta::placeholder{color:#C4C8CE}
+.notebox{align-self:stretch;border:1px solid var(--line);border-radius:6px;background:#fff;padding:4px 11px 8px;display:flex;flex-direction:column;transition:border-color .15s}
+.notebox:hover{border-color:#CFCBC1}
+.notebox:focus-within{outline:2px solid var(--accent);outline-offset:1px}
+.notebox .nh{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-top:7px;user-select:none}
+.notebox textarea.nf{width:100%;min-height:26px;border:none;border-bottom:1px dashed var(--line);border-radius:0;outline:none;resize:none;overflow:hidden;padding:3px 0;font-family:var(--body);font-size:13.5px;line-height:1.5;background:transparent;color:var(--ink)}
+.notebox textarea.nf:focus{border-bottom-color:var(--accent)}
+body.dark .notebox{background:#1C2128;border-color:var(--line)}
 
 /* ── Bridge note ── */
 .bridge{background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);margin-top:20px;overflow:hidden}
@@ -344,7 +351,7 @@ body.dark .sync-area-row{background:#1C2128;}
   .navbtn{width:auto;white-space:nowrap}
   .nav-bottom-block{display:none}
   .cpgrid{grid-template-columns:58px 1fr 1fr;grid-template-areas:"h0 hp ha" "ul up ua" "hcl hcp hca" "fl fp fa" "hn hn hn" "note note note";}
-  textarea.noteta{min-height:180px}
+  textarea.noteta{min-height:98px}
   .summary .track{width:100%}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -920,14 +927,24 @@ function cpBlock(area,proc,key,rec){
   wrap.appendChild(pphLine(area,proc,key));
   return wrap;
 }
-/* ── bridge note sections: one box, headings typed in; empty headings never go out ── */
+/* ── bridge note sections: one box, fixed headings, one field each; saved as one note_u text ── */
 const NOTE_SECTIONS={
   Midday:["Open summary","Root cause","Immediate action (midday)","Countermeasure"],
   EOD:["Open summary","Root cause","Action taken (end of day)","Countermeasure"]
 };
 const NOTE_HEADS=new Set([...NOTE_SECTIONS.Midday,...NOTE_SECTIONS.EOD].map(h=>h.toLowerCase()+":"));
-function noteTemplate(cp){ return (NOTE_SECTIONS[cp]||NOTE_SECTIONS.EOD).map(h=>h+":\n").join("\n"); }
 function isNoteHead(line){ return NOTE_HEADS.has(line.trim().toLowerCase()); }
+/* split saved text into this checkpoint's sections; text before any heading (old notes) goes to the first one */
+function noteParse(text,heads){
+  const out=heads.map(()=>[]); let cur=0;
+  for(const ln of String(text||"").split("\n")){
+    const i=heads.findIndex(h=>h.toLowerCase()+":"===ln.trim().toLowerCase());
+    if(i>=0){ cur=i; continue; }
+    out[cur].push(ln);
+  }
+  return out.map(a=>a.join("\n").trim());
+}
+function noteJoin(heads,vals){ return heads.map((h,i)=>vals[i].trim()?h+":\n"+vals[i].trim():"").filter(Boolean).join("\n\n"); }
 function noteClean(text){
   const lines=String(text||"").split("\n"); const out=[];
   for(let i=0;i<lines.length;i++){
@@ -942,13 +959,17 @@ function noteClean(text){
   return out.join("\n").replace(/\n{3,}/g,"\n\n").trim();
 }
 function noteArea(area,proc,key,field,val){
-  const t=el("textarea","noteta");
-  const cp=key.split("|")[1];
-  t.placeholder=(cp==="EOD"?"EOD":"Mid-Day")+" bridge notes";
-  t.value=val||noteTemplate(cp);
-  t.rows=8;
-  t.oninput=()=>{STATE.data[area][proc][key][field]=noteClean(t.value)?t.value:""; refreshBridges(); scheduleSave();};
-  return t;
+  const heads=NOTE_SECTIONS[key.split("|")[1]]||NOTE_SECTIONS.EOD;
+  const vals=noteParse(val,heads);
+  const box=el("div","notebox");
+  const grow=t=>{ t.style.height="auto"; t.style.height=t.scrollHeight+"px"; };
+  heads.forEach((h,i)=>{
+    box.appendChild(el("div","nh",h));
+    const t=el("textarea","nf"); t.rows=1; t.value=vals[i];
+    t.oninput=()=>{ vals[i]=t.value; grow(t); STATE.data[area][proc][key][field]=noteJoin(heads,vals); refreshBridges(); scheduleSave(); };
+    box.appendChild(t); requestAnimationFrame(()=>grow(t));
+  });
+  return box;
 }
 /* ── auto EOD narrative: composes volume, financial, HC, mid-day note, EOD note ── */
 function esc(x){ return String(x).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
