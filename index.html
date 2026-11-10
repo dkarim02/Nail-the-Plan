@@ -174,16 +174,6 @@ h1,h2,h3{font-family:var(--disp);margin:0;font-weight:600}
 .ind-pct{font-family:var(--mono);font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:20px;background:#EDE7F6;color:#6A3FA0;white-space:nowrap;flex-shrink:0}
 .ind-hrs-pct{font-family:var(--mono);font-size:10px;font-weight:600;padding:2px 6px;border-radius:20px;background:#EDE7F6;color:#6A3FA0;white-space:nowrap;flex-shrink:0;margin-left:4px}
 .fieldwrap{position:relative}
-.diff-badge{display:none;font-family:var(--mono);font-size:11px;font-weight:600;white-space:nowrap;flex-shrink:0;padding:0 4px 0 8px;pointer-events:none}
-.diff-badge.over{display:block;color:var(--make)}
-.diff-badge.under{display:block;color:var(--behind)}
-.act-wrap{display:flex;align-items:center;border:1px solid var(--line);border-radius:6px;background:#fff;overflow:hidden;transition:border-color .15s,box-shadow .15s}
-.act-wrap:hover{border-color:#CFCBC1}
-.act-wrap:focus-within{outline:2px solid var(--accent);outline-offset:1px}
-.act-wrap input.f{flex:1;min-width:0;border:none !important;background:transparent !important;box-shadow:none !important;outline:none !important}
-body.dark .act-wrap{background:#1C2128;border-color:var(--line)}
-body.dark .act-wrap:hover{border-color:#3C4650}
-body.dark .act-wrap input.f{color:var(--ink)}
 input.f{width:100%;border:1px solid var(--line);border-radius:6px;padding:7px 9px;font-family:var(--mono);font-size:14.5px;font-variant-numeric:tabular-nums;text-align:right;background:#fff;transition:border-color .15s,box-shadow .15s}
 
 /* ── Total hours input (replaces per-person dropdown) ── */
@@ -195,13 +185,6 @@ textarea.noteta{align-self:stretch;width:100%;height:100%;min-height:112px;resiz
   border:1px solid var(--line);border-radius:6px;padding:9px 11px;font-family:var(--body);font-size:13.5px;line-height:1.5;background:#fff;color:var(--ink);transition:border-color .15s}
 textarea.noteta:hover{border-color:#CFCBC1}
 textarea.noteta::placeholder{color:#C4C8CE}
-.notebox{align-self:stretch;border:1px solid var(--line);border-radius:6px;background:#fff;padding:4px 11px 8px;display:flex;flex-direction:column;transition:border-color .15s}
-.notebox:hover{border-color:#CFCBC1}
-.notebox:focus-within{outline:2px solid var(--accent);outline-offset:1px}
-.notebox .nh{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-top:7px;user-select:none}
-.notebox textarea.nf{width:100%;min-height:26px;border:none;border-bottom:1px dashed var(--line);border-radius:0;outline:none;resize:none;overflow:hidden;padding:3px 0;font-family:var(--body);font-size:13.5px;line-height:1.5;background:transparent;color:var(--ink)}
-.notebox textarea.nf:focus{border-bottom-color:var(--accent)}
-body.dark .notebox{background:#1C2128;border-color:var(--line)}
 
 /* ── Bridge note ── */
 .bridge{background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);margin-top:20px;overflow:hidden}
@@ -316,11 +299,6 @@ body.dark .sync-area-row{background:#1C2128;}
 .late-just:focus{outline:2px solid var(--accent);}
 .late-char{font-family:var(--mono);font-size:10.5px;color:var(--muted);text-align:right;margin-top:3px;}
 .late-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;}
-.late-tabs{display:flex;gap:0;border-bottom:1px solid var(--line-2);margin:0 0 14px;}
-.late-tab{flex:1;padding:9px 0;font-family:var(--mono);font-size:12px;font-weight:600;text-align:center;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s,border-color .15s;}
-.late-tab.active{color:var(--ink);border-bottom-color:var(--accent);}
-.late-tab-panel{display:none;}
-.late-tab-panel.active{display:block;}
 
 /* ── Status check modal ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(20,24,29,.55);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
@@ -336,7 +314,7 @@ body.dark .sync-area-row{background:#1C2128;}
 .status-banner.allclear{background:var(--make-bg);color:var(--make)}
 .status-banner.warning{background:var(--near-bg);color:var(--near)}
 .status-banner.error{background:var(--behind-bg);color:var(--behind)}
-.status-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;margin-bottom:5px;background:var(--card);border:1px solid var(--line-2)}
+.status-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;margin-bottom:5px;background:#FBFBF9;border:1px solid var(--line-2)}
 .status-row .sr-dept{font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:.04em;flex:1}
 .sr-badge{font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
 .sr-badge.submitted{background:var(--make-bg);color:var(--make)}
@@ -419,11 +397,27 @@ body.view-2nd .bshift.shift1{display:none}
       <button class="btn" id="btnPostMenu">Webhooks &#9660;</button>
       <div class="wh-menu" id="postMenu" style="min-width:220px;">
         <span class="wh-title">Webhooks</span>
-        <div class="wh-row"><span class="wh-label">1st Shift</span><span class="wh-val">Configured</span></div>
-        <div class="wh-row"><span class="wh-label">2nd Shift</span><span class="wh-val">Configured</span></div>
-        <div class="wh-row"><span class="wh-label">Submit EOD</span><span class="wh-val">Configured</span></div>
-        <div class="wh-row"><span class="wh-label">Send Report</span><span class="wh-val">Configured</span></div>
-        <div class="wh-row"><span class="wh-label">Check Status</span><span class="wh-val">Configured</span></div>
+        <div class="wh-row">
+          <span class="wh-label">1st Shift</span>
+          <input class="wh-input" id="wh1st" placeholder="Paste 1st shift Teams URL…" />
+        </div>
+        <div class="wh-row">
+          <span class="wh-label">2nd Shift</span>
+          <input class="wh-input" id="wh2nd" placeholder="Paste 2nd shift Teams URL…" />
+        </div>
+        <div class="wh-row">
+          <span class="wh-label">Submit EOD</span>
+          <input class="wh-input" id="whSubmit" placeholder="Paste SharePoint flow URL…" />
+        </div>
+        <div class="wh-row">
+          <span class="wh-label">Send Report</span>
+          <input class="wh-input" id="whSendReport" placeholder="Paste send report flow URL…" />
+        </div>
+        <div class="wh-row">
+          <span class="wh-label">Check Status</span>
+          <input class="wh-input" id="whCheckStatus" placeholder="Paste check-status flow URL…" />
+        </div>
+        <button class="btn primary wh-save" id="btnWhSave">Save webhooks</button>
       </div>
     </div>
     <button class="btn primary" id="btnSave">Save</button>
@@ -492,7 +486,14 @@ function reconcile(st){
     if(st.data[newA] && st.data[newA][oldP] && !st.data[newA][newA]){ st.data[newA][newA]=st.data[newA][oldP]; delete st.data[newA][oldP]; } }
   for(const a in SEED){ st.data[a]=st.data[a]||{};
     for(const p in SEED[a]){ if(!st.data[a][p]) st.data[a][p]=clone(SEED[a][p]); } }
+  if(st.meta.teamsWebhook===undefined) st.meta.teamsWebhook=DEFAULT_WEBHOOK_2ND; // legacy
+  if(!st.meta.teamsWebhooks) st.meta.teamsWebhooks={"1st":DEFAULT_WEBHOOK_1ST,"2nd":DEFAULT_WEBHOOK_2ND};
+  if(!st.meta.teamsWebhooks["1st"]) st.meta.teamsWebhooks["1st"]=DEFAULT_WEBHOOK_1ST;
+  if(!st.meta.teamsWebhooks["2nd"]) st.meta.teamsWebhooks["2nd"]=DEFAULT_WEBHOOK_2ND;
   if(st.meta.wordWebhook===undefined) st.meta.wordWebhook="";
+  if(st.meta.submitWebhook===undefined||!st.meta.submitWebhook) st.meta.submitWebhook=DEFAULT_WEBHOOK_SUBMIT;
+  if(st.meta.sendReportWebhook===undefined||!st.meta.sendReportWebhook) st.meta.sendReportWebhook=DEFAULT_WEBHOOK_SEND;
+  if(st.meta.checkStatusWebhook===undefined||!st.meta.checkStatusWebhook) st.meta.checkStatusWebhook=DEFAULT_WEBHOOK_CHECK;
   if(!st.meta.submitted) st.meta.submitted={};
   if(!st.meta.jsonBinUrl) st.meta.jsonBinUrl=DEFAULT_JSONBIN_URL;
   return st;
@@ -545,20 +546,13 @@ function planDayISO(){
   if(pst.getHours()<3){ pst.setDate(pst.getDate()-1); }
   return `${pst.getFullYear()}-${String(pst.getMonth()+1).padStart(2,"0")}-${String(pst.getDate()).padStart(2,"0")}`;
 }
-var _dayResetFired=false;
 function resetPersonHoursIfNewDay(){
   const today=planDayISO();
   if(STATE.meta.lastResetDate===today) return;
   for(const a in STATE.data) for(const p in STATE.data[a]) for(const key in STATE.data[a][p]){
-    const r=STATE.data[a][p][key];
-    r.plan_u=null; r.act_u=null; r.plan_f=null; r.act_f=null;
-    r.plan_hc=null; r.act_hc=null; r.plan_ind_hc=null; r.act_ind_hc=null;
-    r.recirc=null; r.shiftHours=null; r.totalHours=null; r.indirectHours=null; r.gapHours=null; r.perfPct=null; r.note_u="";
+    const r=STATE.data[a][p][key]; r.totalHours=null; r.indirectHours=null;
   }
-  STATE.notes={}; STATE.procNotes={};
-  STATE.meta.autoSyncedBlocks={};
   STATE.meta.lastResetDate=today;
-  _dayResetFired=true;
 }
 let STATE=reconcile(load());
 if(STATE.notes){for(const _a in STATE.notes){if(typeof STATE.notes[_a]==="string")STATE.notes[_a]={"1st":STATE.notes[_a],"2nd":""};}}
@@ -701,7 +695,6 @@ function renderMain(){
   for(const p in procs){ main.appendChild(processCard(current,p,procs[p])); }
   if(PROC_BRIDGE.has(current)){ for(const p in procs) main.appendChild(procBridgeCard(current,p)); }
   else { main.appendChild(bridgeCard(current)); }
-  refreshDiffBadges();
 }
 function processCard(area,proc,pdata){
   const r=rollProcess(pdata);
@@ -715,8 +708,8 @@ function processCard(area,proc,pdata){
   for(const sh of SHIFTS){
     const sb=el("div","shiftblock shift"+(sh==="1st"?"1":"2"));
     const shHead=el("div","sh"); shHead.innerHTML=`<span class="shdot"></span><span>${sh} Shift</span>`;
-    const eodR=pdata[sh+"|EOD"]||(pdata[sh+"|EOD"]={plan_u:null,act_u:null,note_u:"",plan_f:null,act_f:null,note_f:"",plan_hc:null,act_hc:null,plan_ind_hc:null,act_ind_hc:null,recirc:null,shiftHours:null,totalHours:null,indirectHours:null,gapHours:null,perfPct:null});
-    pdata[sh+"|Midday"]=pdata[sh+"|Midday"]||{plan_u:null,act_u:null,note_u:"",plan_f:null,act_f:null,note_f:"",plan_hc:null,act_hc:null,plan_ind_hc:null,act_ind_hc:null,recirc:null,totalHours:null,indirectHours:null,gapHours:null,perfPct:null};
+    const eodR=pdata[sh+"|EOD"]||(pdata[sh+"|EOD"]={plan_u:null,act_u:null,note_u:"",plan_f:null,act_f:null,note_f:"",plan_hc:null,act_hc:null,plan_ind_hc:null,act_ind_hc:null,recirc:null,shiftHours:null,totalHours:null,indirectHours:null});
+    pdata[sh+"|Midday"]=pdata[sh+"|Midday"]||{plan_u:null,act_u:null,note_u:"",plan_f:null,act_f:null,note_f:"",plan_hc:null,act_hc:null,plan_ind_hc:null,act_ind_hc:null,recirc:null,totalHours:null,indirectHours:null};
     const hw=el("span","shhours");
 
     // Shift hrs (stays at the top \u2014 applies to whole shift)
@@ -730,7 +723,7 @@ function processCard(area,proc,pdata){
     // Build each checkpoint with its own Total hrs / Indirect hrs bar above it
     for(const cp of CPS){
       const key=sh+"|"+cp;
-      const cpRec=pdata[key]||(pdata[key]={plan_u:null,act_u:null,note_u:"",plan_f:null,act_f:null,note_f:"",plan_hc:null,act_hc:null,plan_ind_hc:null,act_ind_hc:null,recirc:null,shiftHours:null,totalHours:null,indirectHours:null,gapHours:null,perfPct:null});
+      const cpRec=pdata[key]||(pdata[key]={plan_u:null,act_u:null,note_u:"",plan_f:null,act_f:null,note_f:"",plan_hc:null,act_hc:null,plan_ind_hc:null,act_ind_hc:null,recirc:null,shiftHours:null,totalHours:null,indirectHours:null});
 
       // Hours bar: Total hrs | Indirect hrs \u2014 side by side above the card
       const hBar=el("div","cp-hrs-bar");
@@ -743,7 +736,7 @@ function processCard(area,proc,pdata){
       thInput.oninput=()=>{
         const v=thInput.value===""?null:parseFloat(thInput.value);
         STATE.data[area][proc][key].totalHours=isNaN(v)?null:v;
-        paintInd(); paintGap(); liveUpdate();
+        paintInd(); liveUpdate();
       };
       thCol.appendChild(thLbl); thCol.appendChild(thInput); hBar.appendChild(thCol);
 
@@ -766,38 +759,6 @@ function processCard(area,proc,pdata){
         paintInd(); liveUpdate();
       };
       indCol.appendChild(indLbl); indCol.appendChild(indInput); indCol.appendChild(indBadge); hBar.appendChild(indCol);
-
-      // Gap hrs col (shows as % of Total hrs)
-      const gapCol=el("div","cp-hrs-col");
-      const gapLbl=el("span","cp-hrs-lbl","Gap hrs");
-      const gapInput=el("input","f num shh"); gapInput.type="number"; gapInput.step="0.5"; gapInput.min="0"; gapInput.placeholder="—";
-      if(cpRec.gapHours!=null) gapInput.value=cpRec.gapHours;
-      const gapBadge=el("span","ind-hrs-pct"); gapBadge.style.display="none";
-      function paintGap(){
-        const th=STATE.data[area][proc][key].totalHours;
-        const gh=STATE.data[area][proc][key].gapHours;
-        if(th==null||th===0||gh==null){gapBadge.style.display="none";}
-        else{gapBadge.style.display="";gapBadge.textContent=Math.round(gh/th*100)+"% of hrs";}
-      }
-      paintGap();
-      gapInput.oninput=()=>{
-        const v=gapInput.value===""?null:parseFloat(gapInput.value);
-        STATE.data[area][proc][key].gapHours=isNaN(v)?null:v;
-        paintGap(); liveUpdate();
-      };
-      gapCol.appendChild(gapLbl); gapCol.appendChild(gapInput); gapCol.appendChild(gapBadge); hBar.appendChild(gapCol);
-
-      // Performance % col (entered straight from the labor report)
-      const perfCol=el("div","cp-hrs-col");
-      const perfLbl=el("span","cp-hrs-lbl","Perf %");
-      const perfInput=el("input","f num shh"); perfInput.type="number"; perfInput.step="1"; perfInput.min="0"; perfInput.placeholder="—";
-      if(cpRec.perfPct!=null) perfInput.value=cpRec.perfPct;
-      perfInput.oninput=()=>{
-        const v=perfInput.value===""?null:parseFloat(perfInput.value);
-        STATE.data[area][proc][key].perfPct=isNaN(v)?null:v;
-        liveUpdate();
-      };
-      perfCol.appendChild(perfLbl); perfCol.appendChild(perfInput); hBar.appendChild(perfCol);
 
       sb.appendChild(hBar);
       sb.appendChild(cpBlock(area,proc,key,cpRec));
@@ -826,18 +787,7 @@ function numInput(area,proc,key,field,val){
     }
     liveUpdate();
   };
-  if(field==="act_u"||field==="act_f"){
-    const aw=el("div","act-wrap");
-    const badge=el("span","diff-badge");
-    badge.dataset.diffArea=area; badge.dataset.diffProc=proc;
-    badge.dataset.diffKey=key; badge.dataset.diffField=field;
-    aw.appendChild(badge);
-    aw.appendChild(i);
-    w.appendChild(aw);
-  } else {
-    w.appendChild(i);
-  }
-  return w;
+  w.appendChild(i); return w;
 }
 function place(n,a){n.style.gridArea=a;return n;}
 
@@ -911,7 +861,7 @@ function cpBlock(area,proc,key,rec){
   g.appendChild(place(el("span","colhead"),"h0"));
   g.appendChild(place(el("span","colhead","Planned"),"hp"));
   g.appendChild(place(el("span","colhead","Actual"),"ha"));
-  g.appendChild(place(el("span","colhead left","Bridge Notes"),"hn"));
+  g.appendChild(place(el("span","colhead left","Note"),"hn"));
   g.appendChild(place(el("span","glbl",processUOM(area,proc)==="cases"?"Cases":"Units"),"ul"));
   g.appendChild(place(numInput(area,proc,key,"plan_u",rec.plan_u),"up"));
   g.appendChild(place(numInput(area,proc,key,"act_u",rec.act_u),"ua"));
@@ -927,49 +877,13 @@ function cpBlock(area,proc,key,rec){
   wrap.appendChild(pphLine(area,proc,key));
   return wrap;
 }
-/* ── bridge note sections: one box, fixed headings, one field each; saved as one note_u text ── */
-const NOTE_SECTIONS={
-  Midday:["Open summary","Root cause","Immediate action","Countermeasure"],
-  EOD:["Open summary","Root cause","Action taken","Countermeasure"]
-};
-const NOTE_HEADS=new Set([...NOTE_SECTIONS.Midday,...NOTE_SECTIONS.EOD].map(h=>h.toLowerCase()+":"));
-function isNoteHead(line){ return NOTE_HEADS.has(line.trim().toLowerCase()); }
-/* split saved text into this checkpoint's sections; text before any heading (old notes) goes to the first one */
-function noteParse(text,heads){
-  const out=heads.map(()=>[]); let cur=0;
-  for(const ln of String(text||"").split("\n")){
-    const i=heads.findIndex(h=>h.toLowerCase()+":"===ln.trim().toLowerCase());
-    if(i>=0){ cur=i; continue; }
-    out[cur].push(ln);
-  }
-  return out.map(a=>a.join("\n").trim());
-}
-function noteJoin(heads,vals){ return heads.map((h,i)=>vals[i].trim()?h+":\n"+vals[i].trim():"").filter(Boolean).join("\n\n"); }
-function noteClean(text){
-  const lines=String(text||"").split("\n"); const out=[];
-  for(let i=0;i<lines.length;i++){
-    const ln=lines[i];
-    if(isNoteHead(ln)){
-      let j=i+1, has=false;
-      while(j<lines.length && !isNoteHead(lines[j])){ if(lines[j].trim()){has=true;break;} j++; }
-      if(!has) continue;
-    }
-    out.push(ln);
-  }
-  return out.join("\n").replace(/\n{3,}/g,"\n\n").trim();
-}
 function noteArea(area,proc,key,field,val){
-  const heads=NOTE_SECTIONS[key.split("|")[1]]||NOTE_SECTIONS.EOD;
-  const vals=noteParse(val,heads);
-  const box=el("div","notebox");
-  const grow=t=>{ t.style.height="auto"; t.style.height=t.scrollHeight+"px"; };
-  heads.forEach((h,i)=>{
-    box.appendChild(el("div","nh",h));
-    const t=el("textarea","nf"); t.rows=1; t.value=vals[i];
-    t.oninput=()=>{ vals[i]=t.value; grow(t); STATE.data[area][proc][key][field]=noteJoin(heads,vals); refreshBridges(); scheduleSave(); };
-    box.appendChild(t); requestAnimationFrame(()=>grow(t));
-  });
-  return box;
+  const t=el("textarea","noteta");
+  t.placeholder=(key.split("|")[1]==="EOD"?"EOD":"Mid-Day")+" note — staffing (HC), backlog, downtime, recovery plan…";
+  t.value=val||"";
+  t.rows=3;
+  t.oninput=()=>{STATE.data[area][proc][key][field]=t.value; refreshBridges(); scheduleSave();};
+  return t;
 }
 /* ── auto EOD narrative: composes volume, financial, HC, mid-day note, EOD note ── */
 function esc(x){ return String(x).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
@@ -994,11 +908,6 @@ function eodParts(area,proc,sh){
     const indMidPct=(mid.totalHours!=null&&mid.totalHours!==0)?` (${Math.round(mid.indirectHours/mid.totalHours*100)}% of total hrs)`:"";
     out.push(["Indirect hrs (Mid-day)",`${fmt1(mid.indirectHours)} hrs${indMidPct}`]);
   }
-  if(mid.gapHours!=null){
-    const gapMidPct=(mid.totalHours!=null&&mid.totalHours!==0)?` (${Math.round(mid.gapHours/mid.totalHours*100)}% of total hrs)`:"";
-    out.push(["Gap hrs (Mid-day)",`${fmt1(mid.gapHours)} hrs${gapMidPct}`]);
-  }
-  if(mid.perfPct!=null) out.push(["Performance (Mid-day)",`${mid.perfPct}%`]);
   if(eod.plan_hc!=null||eod.act_hc!=null){
     out.push(["HC (EOD)",`${eod.act_hc==null?"\u2014":fmt(eod.act_hc)} actual vs ${eod.plan_hc==null?"\u2014":fmt(eod.plan_hc)} planned`]);
   }
@@ -1006,11 +915,6 @@ function eodParts(area,proc,sh){
     const indEodPct=(eod.totalHours!=null&&eod.totalHours!==0)?` (${Math.round(eod.indirectHours/eod.totalHours*100)}% of total hrs)`:"";
     out.push(["Indirect hrs (EOD)",`${fmt1(eod.indirectHours)} hrs${indEodPct}`]);
   }
-  if(eod.gapHours!=null){
-    const gapEodPct=(eod.totalHours!=null&&eod.totalHours!==0)?` (${Math.round(eod.gapHours/eod.totalHours*100)}% of total hrs)`:"";
-    out.push(["Gap hrs (EOD)",`${fmt1(eod.gapHours)} hrs${gapEodPct}`]);
-  }
-  if(eod.perfPct!=null) out.push(["Performance (EOD)",`${eod.perfPct}%`]);
   if(hasRecirc(area)){
     if(mid.recirc!=null) out.push(["Recirc (Mid-day)",`${mid.recirc}% (goal \u2264 10% \u2014 ${mid.recirc<=10?"at/under goal":"over goal"})`]);
     if(eod.recirc!=null) out.push(["Recirc (EOD)",`${eod.recirc}% (goal \u2264 10% \u2014 ${eod.recirc<=10?"at/under goal":"over goal"})`]);
@@ -1027,13 +931,13 @@ function eodParts(area,proc,sh){
   const thFMid=totalHoursVal(area,proc,sh,"Midday"), thFEod=totalHoursVal(area,proc,sh,"EOD");
   if(pFMid!=null) out.push(["Fin PPH (Mid-day)",`${fmt1(pFMid)} (${fmt1(thFMid)} total hrs)`]);
   if(pFEod!=null) out.push(["Fin PPH (EOD)",`${fmt1(pFEod)} (${fmt1(thFEod)} total hrs)`]);
-  const midN=noteClean(mid.note_u), eodN=noteClean(eod.note_u);
-  if(midN) out.push(["Mid-day bridge notes",midN]);
-  if(eodN) out.push(["EOD bridge notes",eodN]);
+  const midN=(mid.note_u||"").trim(), eodN=(eod.note_u||"").trim();
+  if(midN) out.push(["Mid-day",midN]);
+  if(eodN) out.push(["EOD",eodN]);
   return out;
 }
-function composeEOD(area,proc,sh){ const p=eodParts(area,proc,sh); if(!p.length) return `<span class="submuted">Enter volume, financial, HC and Mid-Day / EOD notes \u2014 this summary builds automatically.</span>`; return p.map(x=>`<b>${x[0]}:</b>${x[1].includes("\n")?"<br>":" "}${esc(x[1]).replace(/\n/g,"<br>")}`).join("<br>"); }
-function composeEODText(area,proc,sh){ return eodParts(area,proc,sh).map(x=>x[1].includes("\n")?`${x[0]}:\n${x[1]}`:`${x[0]}: ${x[1]}`).join("\n"); }
+function composeEOD(area,proc,sh){ const p=eodParts(area,proc,sh); if(!p.length) return `<span class="submuted">Enter volume, financial, HC and Mid-Day / EOD notes \u2014 this summary builds automatically.</span>`; return p.map(x=>`<b>${x[0]}:</b> ${esc(x[1])}`).join("<br>"); }
+function composeEODText(area,proc,sh){ return eodParts(area,proc,sh).map(x=>`${x[0]}: ${x[1]}`).join("\n"); }
 function bridgeBlockText(area,proc,sh){ const label=PROC_BRIDGE.has(area)?`${area} / ${proc}`:area; const body=composeEODText(area,proc,sh); return `${label} \u2014 ${sh} Shift EOD (${STATE.meta.date})\n`+(body||"(no data entered)"); }
 function refreshBridges(){ $("#main").querySelectorAll(".eodsum").forEach(elm=>{ elm.innerHTML=composeEOD(current, elm.dataset.proc, elm.dataset.shift); }); }
 /* ── bridge note ── */
@@ -1089,7 +993,7 @@ function shiftNoteText(area,sh){
   const hc=` HC: ${r.hcA==null?"\u2014":fmt(r.hcA)} actual vs ${r.hcP==null?"\u2014":fmt(r.hcP)} planned.`;
   let line=`${area} \u2014 ${sh} Shift EOD (${STATE.meta.date}): ${pctTxt(r.pct)} to goal, ${fmt(r.act)} of ${fmt(r.plan)}${r.uomLabel}${gapTxt}. ${r.made}/${r.tot} processes at or above goal.${hc}`;
   const procNames=Object.keys(STATE.data[area]);
-  const n=noteClean(procNames.length===1 ? (((STATE.data[area][procNames[0]]||{})[sh+"|EOD"]||{}).note_u||"") : getNote(area,sh));
+  const n=(procNames.length===1 ? (((STATE.data[area][procNames[0]]||{})[sh+"|EOD"]||{}).note_u||"") : getNote(area,sh)).trim();
   return n? line+"\n"+n : line;
 }
 function copyShift(area,sh){const proc=Object.keys(STATE.data[area])[0];navigator.clipboard.writeText(bridgeBlockText(area,proc,sh)).then(()=>toast(`${sh} shift note copied`),()=>toast("Copy blocked"));}
@@ -1119,7 +1023,7 @@ function procShiftNoteText(area,proc,sh){
   const gapTxt=gap==null?"":(gap<=0?` — ${fmt(-gap)}${s2.uomLabel} over`:` — ${fmt(gap)}${s2.uomLabel} behind`);
   const hc=` HC: ${s2.hcA==null?"—":fmt(s2.hcA)} actual vs ${s2.hcP==null?"—":fmt(s2.hcP)} planned.`;
   let line=`${area} / ${proc} — ${sh} Shift EOD (${STATE.meta.date}): ${pctTxt(s2.pct)} to goal, ${fmt(s2.act)} of ${fmt(s2.plan)}${s2.uomLabel}${gapTxt}.${hc}`;
-  const n=noteClean(((STATE.data[area][proc]||{})[sh+"|EOD"]||{}).note_u);
+  const n=(((STATE.data[area][proc]||{})[sh+"|EOD"]||{}).note_u||"").trim();
   return n? line+"\n"+n : line;
 }
 function copyProcShift(area,proc,sh){navigator.clipboard.writeText(bridgeBlockText(area,proc,sh)).then(()=>toast(`${proc} ${sh} note copied`),()=>toast("Copy blocked"));}
@@ -1165,20 +1069,6 @@ function liveUpdate(){
   refreshComputed();
   scheduleSave();
 }
-function refreshDiffBadges(){
-  document.querySelectorAll(".diff-badge[data-diff-area]").forEach(badge=>{
-    const area=badge.dataset.diffArea, proc=badge.dataset.diffProc;
-    const key=badge.dataset.diffKey, field=badge.dataset.diffField;
-    const rec=(STATE.data[area]&&STATE.data[area][proc]&&STATE.data[area][proc][key])||{};
-    const planField=field==="act_u"?"plan_u":"plan_f";
-    const act=rec[field]; const plan=rec[planField];
-    if(act==null||plan==null){ badge.className="diff-badge"; return; }
-    const diff=act-plan;
-    badge.textContent=(diff>=0?"+":"")+fmt(diff);
-    badge.className="diff-badge "+(diff>=0?"over":"under");
-  });
-}
-
 function refreshComputed(){
   // area head pill
   const ar=rollArea(current);
@@ -1199,7 +1089,6 @@ function refreshComputed(){
       const s=cps[ci] && cps[ci].querySelector('[data-role=cpstat]'); if(s){s.className="cpstat "+st.cls; s.textContent=st.pct==null?st.label:pctTxt(st.pct)+" · "+st.label;} ci++; }
   });
   $("#main").querySelectorAll(".cppph").forEach(elm=>{ elm.innerHTML=pphHTML(current, elm.dataset.proc, elm.dataset.sh, elm.dataset.cp); });
-  refreshDiffBadges();
   refreshBridges();
 }
 function renderUpdated(){
@@ -1212,14 +1101,13 @@ function renderUpdated(){
 function download(name,text,type){const b=new Blob([text],{type:type||"text/plain"});const u=URL.createObjectURL(b);const a=document.createElement("a");a.href=u;a.download=name;a.click();URL.revokeObjectURL(u);}
 function exportJson(){download(`ntp_dc499_${STATE.meta.date}.json`,JSON.stringify(STATE,null,1),"application/json");toast("Data exported");}
 function exportCsv(){
-  const rows=[["Date","Area","Process","Shift","Checkpoint","Planned HC","Actual HC","Indirect Hrs","Indirect Hrs %","Gap Hrs","Gap Hrs %","Performance %","UOM","Planned Vol","Actual Vol","% to Goal","Vol to Goal","Planned $","Actual $","Recirc %","Total Hrs","PPH","Note"]];
+  const rows=[["Date","Area","Process","Shift","Checkpoint","Planned HC","Actual HC","Indirect Hrs","Indirect Hrs %","UOM","Planned Vol","Actual Vol","% to Goal","Vol to Goal","Planned $","Actual $","Recirc %","Total Hrs","PPH","Note"]];
   for(const a of AREAS)for(const p in STATE.data[a])for(const sh of SHIFTS)for(const cp of CPS){
     const r=STATE.data[a][p][sh+"|"+cp]||{}; const st=statusOf(r.plan_u,r.act_u);
     const gap=(r.plan_u!=null&&r.act_u!=null)?r.plan_u-r.act_u:"";
     const _th=totalHoursHC(a,p,sh,cp), _pph=pph(a,p,sh,cp);
     const _indPct=(r.indirectHours!=null&&r.totalHours!=null&&r.totalHours!==0)?Math.round(r.indirectHours/r.totalHours*100)+"%":"";
-    const _gapPct=(r.gapHours!=null&&r.totalHours!=null&&r.totalHours!==0)?Math.round(r.gapHours/r.totalHours*100)+"%":"";
-    rows.push([STATE.meta.date,a,p,sh,cp,r.plan_hc??"",r.act_hc??"",r.indirectHours??"",_indPct,r.gapHours??"",_gapPct,r.perfPct==null?"":r.perfPct+"%",processUOM(a,p)==="cases"?"Cases":"Units",r.plan_u??"",r.act_u??"",st.pct==null?"":Math.round(st.pct*100)+"%",gap,r.plan_f??"",r.act_f??"",r.recirc??"",_th==null?"":Math.round(_th*10)/10,_pph==null?"":Math.round(_pph*10)/10,noteClean(r.note_u).replace(/\n+/g," / ")]);
+    rows.push([STATE.meta.date,a,p,sh,cp,r.plan_hc??"",r.act_hc??"",r.indirectHours??"",_indPct,processUOM(a,p)==="cases"?"Cases":"Units",r.plan_u??"",r.act_u??"",st.pct==null?"":Math.round(st.pct*100)+"%",gap,r.plan_f??"",r.act_f??"",r.recirc??"",_th==null?"":Math.round(_th*10)/10,_pph==null?"":Math.round(_pph*10)/10,(r.note_u||"").replace(/\n/g," / ")]);
   }
   const csv=rows.map(r=>r.map(c=>{c=String(c);return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c;}).join(",")).join("\n");
   download(`ntp_dc499_${STATE.meta.date}.csv`,csv,"text/csv");toast("CSV exported");
@@ -1238,7 +1126,7 @@ function clearArea(area){
   if(!confirm("Clear ALL entered data for "+scope+"?\n\nThis wipes planned/actual volume, financial, HC, recirc, shift hours, PPH inputs and every note (both shifts, Mid-Day + EOD). This can't be undone.")) return;
   for(const p in procs){ for(const key in procs[p]){ const r=procs[p][key];
     r.plan_u=null; r.act_u=null; r.note_u=""; r.plan_f=null; r.act_f=null; r.note_f="";
-    r.plan_hc=null; r.act_hc=null; r.plan_ind_hc=null; r.act_ind_hc=null; r.recirc=null; r.shiftHours=null; r.totalHours=null; r.indirectHours=null; r.gapHours=null; r.perfPct=null; } }
+    r.plan_hc=null; r.act_hc=null; r.plan_ind_hc=null; r.act_ind_hc=null; r.recirc=null; r.shiftHours=null; r.totalHours=null; r.indirectHours=null; } }
   if(STATE.notes && STATE.notes[area]) STATE.notes[area]={"1st":"","2nd":""};
   save(true); renderAll(); toast(area+" data cleared — ready for new entry");
 }
@@ -1247,8 +1135,7 @@ function postToTeams(payload,label,url){
   if(!url){ toast("No Teams webhook set"); return; }
   fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:payload})
     .then(function(r){
-      if(r.ok||r.status===202) toast((label||"Bridge")+" sent \u2014 check the Teams chat");
-      else if(r.status===0) toast((label||"Bridge")+" sent \u2014 confirm it arrived in Teams");
+      if(r.ok||r.status===202||r.status===0) toast((label||"Bridge")+" sent \u2014 check the Teams chat");
       else toast("Teams post failed \u2014 HTTP "+r.status+". Check the webhook URL.");
     })
     .catch(function(e){ toast("Teams post failed \u2014 "+(e.message||"check the webhook URL")); });
@@ -1298,11 +1185,29 @@ function applyShiftView(sh){
 }
 
 function getTeamsWebhook(blockKey){
+  // blockKey is "1st_mid"/"1st_eod"/"2nd_mid"/"2nd_eod" \u2014 map to shift
   var shift = blockKey.startsWith("1st") ? "1st" : "2nd";
-  return shift === "1st" ? DEFAULT_WEBHOOK_1ST : DEFAULT_WEBHOOK_2ND;
+  return (STATE.meta.teamsWebhooks && STATE.meta.teamsWebhooks[shift]) || "";
 }
 function openWebhookMenu(){
+  STATE.meta.teamsWebhooks = STATE.meta.teamsWebhooks || {"1st":"","2nd":""};
+  document.getElementById("wh1st").value = STATE.meta.teamsWebhooks["1st"] || "";
+  document.getElementById("wh2nd").value = STATE.meta.teamsWebhooks["2nd"] || "";
+  document.getElementById("whSubmit").value = STATE.meta.submitWebhook || "";
+  document.getElementById("whSendReport").value = STATE.meta.sendReportWebhook || "";
+  document.getElementById("whCheckStatus").value = STATE.meta.checkStatusWebhook || "";
   document.getElementById("postMenu").classList.toggle("open");
+}
+function saveWebhooks(){
+  STATE.meta.teamsWebhooks = STATE.meta.teamsWebhooks || {};
+  STATE.meta.teamsWebhooks["1st"] = document.getElementById("wh1st").value.trim();
+  STATE.meta.teamsWebhooks["2nd"] = document.getElementById("wh2nd").value.trim();
+  STATE.meta.submitWebhook = document.getElementById("whSubmit").value.trim();
+  STATE.meta.sendReportWebhook = document.getElementById("whSendReport").value.trim();
+  STATE.meta.checkStatusWebhook = document.getElementById("whCheckStatus").value.trim();
+  document.getElementById("postMenu").classList.remove("open");
+  save(true);
+  toast("Webhooks saved");
 }
 
 /* ---- Adaptive Card builder ---- */
@@ -1355,11 +1260,6 @@ function cpBlocks(area, proc, sh, cp){
       var indHrsPct=(rec.totalHours!=null&&rec.totalHours!==0)?" ("+Math.round(rec.indirectHours/rec.totalHours*100)+"% of hrs)":"";
       hcFacts.push({title:"Indirect hrs", value:fmt1(rec.indirectHours)+" hrs"+indHrsPct});
     }
-    if(rec.gapHours!=null){
-      var gapHrsPct=(rec.totalHours!=null&&rec.totalHours!==0)?" ("+Math.round(rec.gapHours/rec.totalHours*100)+"% of hrs)":"";
-      hcFacts.push({title:"Gap hrs", value:fmt1(rec.gapHours)+" hrs"+gapHrsPct});
-    }
-    if(rec.perfPct!=null) hcFacts.push({title:"Performance", value:rec.perfPct+"%"});
     blocks.push({type:"FactSet",spacing:"Small",facts:hcFacts});
   }
 
@@ -1390,10 +1290,9 @@ function cpBlocks(area, proc, sh, cp){
   }
 
   // Note
-  var note=noteClean(rec.note_u);
+  var note=(rec.note_u||"").trim();
   if(note){
-    note=note.split("\n").filter(function(l){return l.trim();}).map(function(l){return isNoteHead(l)?"**"+l.trim()+"**":l;}).join("\n\n");
-    blocks.push({type:"TextBlock",text:"BRIDGE NOTES",weight:"Bolder",spacing:"Small",size:"Small",color:"Accent"});
+    blocks.push({type:"TextBlock",text:"NOTE",weight:"Bolder",spacing:"Small",size:"Small",color:"Accent"});
     blocks.push({type:"TextBlock",text:note,wrap:true,spacing:"None",size:"Small",isSubtle:true});
   }
 
@@ -1545,18 +1444,8 @@ function areaShiftNotes(area, sh){
 function buildSubmitPayload(area, sh){
   return JSON.stringify({ dept: area, shift: sh, plan_date: STATE.meta.date, bridge_text: areaShiftNotes(area,sh) });
 }
-function submitEODLate(area, sh){
-  const url = DEFAULT_WEBHOOK_SUBMIT;
-  if(!url){ toast("No Submit EOD webhook set — add it in the Post menu"); return; }
-  fetch(url, {method:"POST", headers:{"Content-Type":"application/json"}, body:buildSubmitPayload(area,sh)})
-    .then(function(r){
-      if(r.ok||r.status===202||r.status===0) toast(area+" "+sh+" shift EOD submitted ✓");
-      else toast("Submit failed — HTTP "+r.status);
-    })
-    .catch(function(e){ toast("Submit failed — "+(e.message||"check webhook URL")); });
-}
 function submitEOD(area){
-  const url = DEFAULT_WEBHOOK_SUBMIT;
+  const url = STATE.meta.submitWebhook || "";
   if(!url){ toast("No Submit EOD webhook set — add it in the Post menu"); return; }
   const block = currentBlock();
   if(!block){ toast("Outside posting hours — no active shift block right now"); return; }
@@ -1610,9 +1499,6 @@ function showStatusModal(submitted, total, onConfirm){
 
   // footer
   var foot=document.createElement("div"); foot.className="modal-foot";
-  var lateEmail=document.createElement("button"); lateEmail.className="btn ghost"; lateEmail.textContent="Email late…";
-  lateEmail.style.marginRight="auto";
-  lateEmail.onclick=function(){ closeStatusModal(); showLateEmailModal(); }; foot.appendChild(lateEmail);
   var cancel=document.createElement("button"); cancel.className="btn ghost"; cancel.textContent="Cancel";
   cancel.onclick=closeStatusModal; foot.appendChild(cancel);
   if(allClear){
@@ -1648,14 +1534,12 @@ function showStatusLoading(){
 }
 
 /* ---- Send Report ---- */
-function doSendReport(sh, justification){
-  const url = DEFAULT_WEBHOOK_SEND;
+function doSendReport(sh){
+  const url = STATE.meta.sendReportWebhook || "";
   if(!url){ toast("No Send Report webhook set — add it in the Post menu"); return; }
-  const shift = sh || activeShift();
-  var payload = {plan_date: STATE.meta.date, shift: shift};
-  if(justification) payload.late_justification = justification;
+  const shift = sh || (currentBlock()||{shift:'2nd'}).shift;
   fetch(url, {method:"POST", headers:{"Content-Type":"application/json"},
-    body:JSON.stringify(payload)})
+    body:JSON.stringify({plan_date: STATE.meta.date, shift: shift})})
     .then(function(r){
       if(r.ok||r.status===202||r.status===0) toast("EOD report sent ✓ — check your email");
       else toast("Send failed — HTTP "+r.status);
@@ -1664,13 +1548,15 @@ function doSendReport(sh, justification){
 }
 
 function sendReport(){
-  const sendUrl = DEFAULT_WEBHOOK_SEND;
+  const sendUrl = STATE.meta.sendReportWebhook || "";
   if(!sendUrl){ toast("No Send Report webhook set — add it in the Post menu"); return; }
-  const sh=activeShift();
-  const checkUrl = STATE.meta.checkStatusWebhook || DEFAULT_WEBHOOK_CHECK || "";
-  // No check webhook — show status modal with unknown submissions so user still gets Email late override
+  const block=currentBlock();
+  const sh=block?block.shift:"2nd";
+  const checkUrl = STATE.meta.checkStatusWebhook || "";
+  // No check webhook — fall back to simple confirm
   if(!checkUrl){
-    showStatusModal([], AREAS.length, function(){ doSendReport(sh); }); return;
+    if(!confirm("Send the EOD report for "+STATE.meta.date+" to the building manager?\n\nMake sure all departments have submitted before sending.")) return;
+    doSendReport(sh); return;
   }
   showStatusLoading();
   fetch(checkUrl, {method:"POST", headers:{"Content-Type":"application/json"},
@@ -1687,90 +1573,6 @@ function sendReport(){
       // network/parse failure — fall back to confirm
       if(confirm("Could not reach the status check ("+( e.message||"network error")+").\n\nSend the report anyway?")) doSendReport(sh);
     });
-}
-
-/* ---- Email Late override ---- */
-function showLateEmailModal(){
-  var old=document.getElementById("lateEmailModal"); if(old) old.remove();
-  var overlay=document.createElement("div"); overlay.className="modal-overlay"; overlay.id="lateEmailModal";
-  var box=document.createElement("div"); box.className="modal-box late-modal-box";
-
-  var head=document.createElement("div"); head.className="modal-head";
-  head.innerHTML='<h3>Send Late Report</h3><button class="modal-close" id="lemClose">&times;</button>';
-  box.appendChild(head);
-
-  var body=document.createElement("div"); body.className="modal-body";
-
-  var selLbl=document.createElement("span"); selLbl.className="late-lbl"; selLbl.textContent="Shift";
-  body.appendChild(selLbl);
-  var sel=document.createElement("select"); sel.className="late-select";
-  // Pre-select based on active block or time of day
-  var defaultShift=(currentBlock()||{shift: pstNow().getHours()<14?"1st":"2nd"}).shift;
-  [{val:"1st",label:"1st Shift"},{val:"2nd",label:"2nd Shift"}].forEach(function(s){
-    var opt=document.createElement("option"); opt.value=s.val; opt.textContent=s.label;
-    if(s.val===defaultShift) opt.selected=true;
-    sel.appendChild(opt);
-  });
-  body.appendChild(sel);
-
-  // Dept status section — re-fetched whenever shift changes
-  var deptLbl=document.createElement("span"); deptLbl.className="late-lbl"; deptLbl.style.marginTop="10px"; deptLbl.textContent="Department status";
-  body.appendChild(deptLbl);
-  var deptRows=document.createElement("div"); deptRows.id="lemDeptRows";
-  body.appendChild(deptRows);
-
-  function renderDeptRows(submitted){
-    deptRows.innerHTML="";
-    for(var i=0;i<AREAS.length;i++){
-      var a=AREAS[i];
-      var done=submitted.indexOf(a)>=0;
-      var row=document.createElement("div"); row.className="status-row";
-      row.innerHTML='<span class="sr-dept">'+a+'</span><span class="sr-badge '+(done?"submitted":"pending")+'">'+(done?"Submitted":"Pending")+'</span>';
-      deptRows.appendChild(row);
-    }
-  }
-
-  function fetchDeptStatus(sh){
-    var checkUrl=DEFAULT_WEBHOOK_CHECK;
-    if(!checkUrl){ renderDeptRows([]); return; }
-    deptRows.innerHTML='<div class="modal-checking">Checking…</div>';
-    fetch(checkUrl,{method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({plan_date:STATE.meta.date,shift:sh})})
-      .then(function(r){ return r.json(); })
-      .then(function(data){
-        var raw=Array.isArray(data.submitted)?data.submitted:[];
-        var submitted=raw.map(function(x){return typeof x==='string'?x:(x.dept||x.Dept||x.Title||'');}).filter(Boolean);
-        renderDeptRows(submitted);
-      })
-      .catch(function(){ renderDeptRows([]); });
-  }
-
-  sel.onchange=function(){ fetchDeptStatus(sel.value); };
-  fetchDeptStatus(sel.value);
-
-  var justLbl=document.createElement("span"); justLbl.className="late-lbl"; justLbl.style.marginTop="10px"; justLbl.textContent="Reason for late submission (required)";
-  body.appendChild(justLbl);
-  var just=document.createElement("textarea"); just.className="late-just"; just.placeholder="e.g. System outage, shift handover delay…";
-  body.appendChild(just);
-  var charHint=document.createElement("div"); charHint.className="late-char"; charHint.textContent="0 / 10 min characters";
-  just.oninput=function(){
-    charHint.textContent=just.value.trim().length+" characters"+(just.value.trim().length<10?" — needs at least 10":"");
-    sendBtn.disabled=just.value.trim().length<10;
-  };
-  body.appendChild(charHint);
-  box.appendChild(body);
-
-  var foot=document.createElement("div"); foot.className="modal-foot";
-  var cancel=document.createElement("button"); cancel.className="btn ghost"; cancel.textContent="Cancel";
-  cancel.onclick=function(){ overlay.remove(); }; foot.appendChild(cancel);
-  var sendBtn=document.createElement("button"); sendBtn.className="btn primary"; sendBtn.textContent="Send Report";
-  sendBtn.disabled=true;
-  sendBtn.onclick=function(){ var j=just.value.trim(); overlay.remove(); doSendReport(sel.value, j); };
-  foot.appendChild(sendBtn); box.appendChild(foot);
-  overlay.appendChild(box);
-  document.body.appendChild(overlay);
-  document.getElementById("lemClose").onclick=function(){ overlay.remove(); };
-  overlay.addEventListener("click",function(e){ if(e.target===overlay) overlay.remove(); });
 }
 
 /* ── JSONBin shared sync ── */
@@ -1792,16 +1594,10 @@ function buildAreaPayload(area){
     out[p]={};
     for(const key in procs[p]){
       const r=procs[p][key];
+      // Only include filled checkpoints
       if(r.plan_u!=null||r.act_u!=null||r.plan_f!=null||r.act_f!=null){
-        out[p][key]={
-          plan_u:r.plan_u, act_u:r.act_u, plan_f:r.plan_f, act_f:r.act_f,
-          plan_hc:r.plan_hc, act_hc:r.act_hc,
-          plan_ind_hc:r.plan_ind_hc, act_ind_hc:r.act_ind_hc,
-          recirc:r.recirc, shiftHours:r.shiftHours,
-          totalHours:r.totalHours, indirectHours:r.indirectHours,
-          gapHours:r.gapHours, perfPct:r.perfPct,
-          note_u:r.note_u||""
-        };
+        out[p][key]={plan_u:r.plan_u,act_u:r.act_u,plan_f:r.plan_f,act_f:r.act_f,
+          plan_hc:r.plan_hc,act_hc:r.act_hc,recirc:r.recirc,note_u:r.note_u||""};
       }
     }
   }
@@ -1838,21 +1634,14 @@ function mergeRemoteArea(area, remoteProcs, force){
       if(!procs[p][key]) continue;
       const src=remoteProcs[p][key], dst=procs[p][key];
       if(force){
-        // Full overwrite — user explicitly checked this area in the sync modal
+        // Full overwrite — user explicitly checked this area
         if(src.plan_u!=null) dst.plan_u=src.plan_u;
         if(src.act_u!=null)  dst.act_u=src.act_u;
         if(src.plan_f!=null) dst.plan_f=src.plan_f;
         if(src.act_f!=null)  dst.act_f=src.act_f;
         if(src.plan_hc!=null) dst.plan_hc=src.plan_hc;
         if(src.act_hc!=null)  dst.act_hc=src.act_hc;
-        if(src.plan_ind_hc!=null) dst.plan_ind_hc=src.plan_ind_hc;
-        if(src.act_ind_hc!=null)  dst.act_ind_hc=src.act_ind_hc;
         if(src.recirc!=null)  dst.recirc=src.recirc;
-        if(src.shiftHours!=null) dst.shiftHours=src.shiftHours;
-        if(src.totalHours!=null) dst.totalHours=src.totalHours;
-        if(src.indirectHours!=null) dst.indirectHours=src.indirectHours;
-        if(src.gapHours!=null) dst.gapHours=src.gapHours;
-        if(src.perfPct!=null) dst.perfPct=src.perfPct;
         if(src.note_u) dst.note_u=src.note_u;
       } else {
         // Fill-only — only set fields that are null locally
@@ -1862,14 +1651,7 @@ function mergeRemoteArea(area, remoteProcs, force){
         if(dst.act_f==null  && src.act_f!=null)  dst.act_f=src.act_f;
         if(dst.plan_hc==null && src.plan_hc!=null) dst.plan_hc=src.plan_hc;
         if(dst.act_hc==null  && src.act_hc!=null)  dst.act_hc=src.act_hc;
-        if(dst.plan_ind_hc==null && src.plan_ind_hc!=null) dst.plan_ind_hc=src.plan_ind_hc;
-        if(dst.act_ind_hc==null  && src.act_ind_hc!=null)  dst.act_ind_hc=src.act_ind_hc;
         if(dst.recirc==null  && src.recirc!=null)   dst.recirc=src.recirc;
-        if(dst.shiftHours==null && src.shiftHours!=null) dst.shiftHours=src.shiftHours;
-        if(dst.totalHours==null && src.totalHours!=null) dst.totalHours=src.totalHours;
-        if(dst.indirectHours==null && src.indirectHours!=null) dst.indirectHours=src.indirectHours;
-        if(dst.gapHours==null && src.gapHours!=null) dst.gapHours=src.gapHours;
-        if(dst.perfPct==null && src.perfPct!=null) dst.perfPct=src.perfPct;
         if((!dst.note_u||dst.note_u==="") && src.note_u) dst.note_u=src.note_u;
       }
     }
@@ -1894,7 +1676,7 @@ function autoSyncFromJsonBin(blockKey){
       let changed=false;
       for(const a of AREAS){
         if(data[a]){
-          if(mergeRemoteArea(a,data[a],false)) changed=true;
+          if(mergeRemoteArea(a,data[a],true)) changed=true;
         }
       }
       if(changed){ save(true); renderAll(); toast("Auto-synced other depts' numbers"); }
@@ -2064,7 +1846,7 @@ function renderTimer(){
   for(var i=0;i<BLOCKS.length;i++){
     var e=toMins(BLOCKS[i].endH,BLOCKS[i].endM);
     var s=toMins(BLOCKS[i].startH,BLOCKS[i].startM);
-    if(e<curAdj) missed.push(BLOCKS[i]);
+    if(e<curAdj && curAdj>s) missed.push(BLOCKS[i]);
   }
   // Always show late button if there are missed blocks
   if(lateBtn){
@@ -2089,111 +1871,57 @@ function renderTimer(){
 
 /* ── Late post modal ── */
 function showLateModal(missedBlocks){
+  // close any existing
   var old=document.getElementById("lateModal"); if(old) old.remove();
   var overlay=document.createElement("div"); overlay.className="modal-overlay"; overlay.id="lateModal";
   var box=document.createElement("div"); box.className="modal-box late-modal-box";
 
   var head=document.createElement("div"); head.className="modal-head";
-  head.innerHTML='<h3>Late Submission</h3><button class="modal-close" id="lmClose">&times;</button>';
+  head.innerHTML='<h3>Post Late Submission</h3><button class="modal-close" id="lmClose">&times;</button>';
   box.appendChild(head);
 
   var body=document.createElement("div"); body.className="modal-body";
 
-  // Tab bar
-  var tabBar=document.createElement("div"); tabBar.className="late-tabs";
-  var tabTeams=document.createElement("div"); tabTeams.className="late-tab active"; tabTeams.textContent="Post to Teams";
-  var tabEod=document.createElement("div"); tabEod.className="late-tab"; tabEod.textContent="Submit EOD";
-  tabBar.appendChild(tabTeams); tabBar.appendChild(tabEod);
-  body.appendChild(tabBar);
-
-  // ── Panel: Post to Teams ──
-  var panelTeams=document.createElement("div"); panelTeams.className="late-tab-panel active";
-
+  // Block selector
   var selLbl=document.createElement("span"); selLbl.className="late-lbl"; selLbl.textContent="Missed window";
-  panelTeams.appendChild(selLbl);
-  var blockSel=document.createElement("select"); blockSel.className="late-select";
+  body.appendChild(selLbl);
+  var sel=document.createElement("select"); sel.className="late-select";
   for(var i=0;i<missedBlocks.length;i++){
     var opt=document.createElement("option"); opt.value=i; opt.textContent=missedBlocks[i].label;
-    blockSel.appendChild(opt);
+    sel.appendChild(opt);
   }
-  panelTeams.appendChild(blockSel);
+  body.appendChild(sel);
 
-  var justLbl=document.createElement("span"); justLbl.className="late-lbl"; justLbl.textContent="Reason (required)";
-  panelTeams.appendChild(justLbl);
+  // Justification
+  var justLbl=document.createElement("span"); justLbl.className="late-lbl"; justLbl.style.marginTop="8px"; justLbl.textContent="Reason for late submission (required)";
+  body.appendChild(justLbl);
   var just=document.createElement("textarea"); just.className="late-just"; just.placeholder="e.g. System outage, shift handover delay, area emergency…";
-  panelTeams.appendChild(just);
+  body.appendChild(just);
   var charHint=document.createElement("div"); charHint.className="late-char"; charHint.textContent="0 / 10 min characters";
-  panelTeams.appendChild(charHint);
+  body.appendChild(charHint);
   just.oninput=function(){
     charHint.textContent=just.value.trim().length+" characters"+(just.value.trim().length<10?" — needs at least 10":"");
-    teamsBtn.disabled=just.value.trim().length<10;
+    sendBtn.disabled=just.value.trim().length<10;
   };
 
-  body.appendChild(panelTeams);
-
-  // ── Panel: Submit EOD ──
-  var panelEod=document.createElement("div"); panelEod.className="late-tab-panel";
-
-  var deptLbl=document.createElement("span"); deptLbl.className="late-lbl"; deptLbl.textContent="Department";
-  panelEod.appendChild(deptLbl);
-  var deptSel=document.createElement("select"); deptSel.className="late-select";
-  for(var j=0;j<AREAS.length;j++){
-    var dopt=document.createElement("option"); dopt.value=AREAS[j]; dopt.textContent=AREAS[j];
-    if(AREAS[j]===current) dopt.selected=true;
-    deptSel.appendChild(dopt);
-  }
-  panelEod.appendChild(deptSel);
-
-  var shiftLbl=document.createElement("span"); shiftLbl.className="late-lbl"; shiftLbl.textContent="Shift";
-  panelEod.appendChild(shiftLbl);
-  var shiftSel=document.createElement("select"); shiftSel.className="late-select";
-  [{val:"1st",label:"1st Shift"},{val:"2nd",label:"2nd Shift"}].forEach(function(s){
-    var sopt=document.createElement("option"); sopt.value=s.val; sopt.textContent=s.label; shiftSel.appendChild(sopt);
-  });
-  panelEod.appendChild(shiftSel);
-
-  body.appendChild(panelEod);
   box.appendChild(body);
 
-  // Tab switching
-  function switchTab(toTeams){
-    tabTeams.classList.toggle("active", toTeams);
-    tabEod.classList.toggle("active", !toTeams);
-    panelTeams.classList.toggle("active", toTeams);
-    panelEod.classList.toggle("active", !toTeams);
-    footTeams.style.display=toTeams?"":"none";
-    footEod.style.display=toTeams?"none":"";
-  }
-  tabTeams.onclick=function(){ switchTab(true); };
-  tabEod.onclick=function(){ switchTab(false); };
-
-  // ── Footer: Teams tab ──
-  var footTeams=document.createElement("div"); footTeams.className="modal-foot";
-  var cancelT=document.createElement("button"); cancelT.className="btn ghost"; cancelT.textContent="Cancel";
-  cancelT.onclick=function(){ overlay.remove(); }; footTeams.appendChild(cancelT);
-  var teamsBtn=document.createElement("button"); teamsBtn.className="btn primary"; teamsBtn.textContent="Send to Teams";
-  teamsBtn.disabled=true;
-  teamsBtn.onclick=function(){
-    var block=missedBlocks[parseInt(blockSel.value)];
+  var foot=document.createElement("div"); foot.className="modal-foot";
+  var cancel=document.createElement("button"); cancel.className="btn ghost"; cancel.textContent="Cancel";
+  cancel.onclick=function(){ overlay.remove(); }; foot.appendChild(cancel);
+  var sendBtn=document.createElement("button"); sendBtn.className="btn primary"; sendBtn.textContent="Send to Teams";
+  sendBtn.disabled=true;
+  sendBtn.onclick=function(){
+    var block=missedBlocks[parseInt(sel.value)];
+    var justText=just.value.trim();
     var url=getTeamsWebhook(block.key);
     if(!url){ toast("No Teams webhook set for "+block.label); return; }
-    var card=buildLateCard(block, just.value.trim());
+    // Build card with late banner injected
+    var card=buildLateCard(block, justText);
     overlay.remove();
     postToTeams(card, block.label+" (late)", url);
-    pushToJsonBin(current);
   };
-  footTeams.appendChild(teamsBtn);
-  box.appendChild(footTeams);
-
-  // ── Footer: EOD tab ──
-  var footEod=document.createElement("div"); footEod.className="modal-foot"; footEod.style.display="none";
-  var cancelE=document.createElement("button"); cancelE.className="btn ghost"; cancelE.textContent="Cancel";
-  cancelE.onclick=function(){ overlay.remove(); }; footEod.appendChild(cancelE);
-  var eodBtn=document.createElement("button"); eodBtn.className="btn primary"; eodBtn.textContent="Submit EOD";
-  eodBtn.onclick=function(){ overlay.remove(); submitEODLate(deptSel.value, shiftSel.value); };
-  footEod.appendChild(eodBtn);
-  box.appendChild(footEod);
-
+  foot.appendChild(sendBtn); box.appendChild(foot);
   overlay.appendChild(box);
   document.body.appendChild(overlay);
   document.getElementById("lmClose").onclick=function(){ overlay.remove(); };
@@ -2206,7 +1934,7 @@ function buildLateCard(block, justification){
       {type:"ColumnSet",columns:[
         {type:"Column",width:"stretch",items:[
           {type:"TextBlock",text:"DC 499",size:"Small",weight:"Bolder",color:"Light",spacing:"None"},
-          {type:"TextBlock",text:current.toUpperCase()+" — LATE SUBMISSION — "+block.label.toUpperCase(),size:"Large",weight:"Bolder",spacing:"None",wrap:true},
+          {type:"TextBlock",text:"LATE SUBMISSION — "+block.label.toUpperCase(),size:"Large",weight:"Bolder",spacing:"None",wrap:true},
         ]},
         {type:"Column",width:"auto",items:[
           {type:"TextBlock",text:"[ LATE ]",size:"Small",weight:"Bolder",spacing:"None",color:"Light"},
@@ -2217,7 +1945,7 @@ function buildLateCard(block, justification){
     {type:"TextBlock",text:"REASON FOR LATE SUBMISSION",weight:"Bolder",size:"Small",color:"Attention",spacing:"Medium"},
     {type:"TextBlock",text:justification,wrap:true,spacing:"None",size:"Small"},
   ];
-  Array.prototype.push.apply(body, cardBlocksForBlock(block, [current]));
+  Array.prototype.push.apply(body, cardBlocksForBlock(block, AREAS));
   return JSON.stringify({type:"AdaptiveCard","$schema":"http://adaptivecards.io/schemas/adaptive-card.json",version:"1.4",body:body});
 }
 
@@ -2226,7 +1954,6 @@ renderTimer();
 checkAutoSync();
 setInterval(function(){ renderTimer(); checkAutoSync(); }, 60000);
 resetPersonHoursIfNewDay();
-if(_dayResetFired){ save(true); setTimeout(function(){ toast("New day — all entries cleared for "+planDayISO()); },400); }
 STATE.meta.date=planDayISO();
 $("#planDate").value=STATE.meta.date;
 $("#planDate").onchange=e=>{STATE.meta.date=e.target.value;save(true);renderMain();};
@@ -2241,6 +1968,7 @@ $("#fabSubmitEod").onclick=function(){ document.getElementById("fabMenu").classL
 $("#fabSendReport").onclick=function(){ document.getElementById("fabMenu").classList.remove("open"); sendReport(); };
 document.addEventListener("click",function(e){ var fw=document.getElementById("fabWrap"); if(fw&&!fw.contains(e.target)) document.getElementById("fabMenu").classList.remove("open"); });
 $("#btnPostMenu").onclick=function(e){ e.stopPropagation(); openWebhookMenu(); };
+$("#btnWhSave").onclick=saveWebhooks;
 document.addEventListener("click",function(e){
   var wrap=document.getElementById("postWrap");
   if(wrap && !wrap.contains(e.target)) document.getElementById("postMenu").classList.remove("open");
